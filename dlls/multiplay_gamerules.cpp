@@ -145,6 +145,9 @@ void CHalfLifeMultiplay::RefreshSkillData( void )
 	// Crowbar whack
 	gSkillData.plrDmgCrowbar = 25;
 
+	// Iceaxe thwang
+	gSkillData.plrDmgIceaxe = 15;	
+
 	// Glock Round
 	gSkillData.plrDmg9MM = 12;
 

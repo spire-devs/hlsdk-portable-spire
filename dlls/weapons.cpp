@@ -354,6 +354,9 @@ void W_Precache( void )
 
 	// hornetgun
 	UTIL_PrecacheOtherWeapon( "weapon_hornetgun" );
+	
+	// iceaxe
+	UTIL_PrecacheOtherWeapon( "weapon_iceaxe" );
 
 	if( g_pGameRules->IsDeathmatch() )
 	{
