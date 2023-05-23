@@ -520,6 +520,18 @@ void CBaseMonster::MonsterThink( void )
 {
 	pev->nextthink = gpGlobals->time + 0.1f;// keep monster thinking.
 
+	int fogEndDist = CEnvFog::GetCurrentEndDist();
+	if(fogEndDist > 0)
+	{
+    m_flDistTooFar = fogEndDist - 100;
+    m_flDistLook = fogEndDist + 300;
+	}
+	else
+	{
+    m_flDistTooFar = 1024.0;
+    m_flDistLook = 2048.0;
+	}
+
 	RunAI();
 
 	float flInterval = StudioFrameAdvance( ); // animate
@@ -2013,9 +2025,6 @@ void CBaseMonster::MonsterInit( void )
 	m_afMemory = MEMORY_CLEAR;
 
 	m_hEnemy = NULL;
-
-	m_flDistTooFar = 1024.0f;
-	m_flDistLook = 2048.0f;
 
 	// set eye position
 	SetEyePosition();

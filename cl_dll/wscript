@@ -18,6 +18,8 @@ def options(opt):
 		help = 'Prefer non-VGUI Scoreboard when USE_VGUI is enabled')
 	grp.add_option('--disable-goldsrc-support', action = 'store_false', dest = 'GOLDSOURCE_SUPPORT',
 		default=True, help = 'disable GoldSource compatibility')
+    grp.add_option('--disable-xashxt-render-support', action  = 'store_false', dest = 'USE_XASHXT_RENDER',
+                   help = 'Enable the xashxt-fwgs extended render features')
 
 	opt.load('vgui')
 
@@ -27,6 +29,7 @@ def configure(conf):
 	conf.env.USE_NOVGUI_SCOREBOARD = conf.options.USE_NOVGUI_SCOREBOARD
 	conf.env.USE_VOICEMGR = conf.options.USE_VOICEMGR
 	conf.env.GOLDSOURCE_SUPPORT = conf.options.GOLDSOURCE_SUPPORT
+    conf.env.USE_XASHXT_RENDER = conf.options.USE_XASHXT_RENDER
 	if conf.env.USE_VGUI:
 		conf.load('vgui')
 		if not conf.check_vgui():

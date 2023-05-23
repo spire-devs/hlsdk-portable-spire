@@ -9,6 +9,7 @@
 
 #include "hud.h"
 #include "cl_util.h"
+#include "fog.h"
 
 // Triangle rendering apis are in gEngfuncs.pTriAPI
 
@@ -95,6 +96,7 @@ Non-transparent triangles-- add them here
 */
 void DLLEXPORT HUD_DrawNormalTriangles( void )
 {
+	gFog.HUD_DrawNormalTriangles();
 	gHUD.m_Spectator.DrawOverview();
 #if TEST_IT
 //	Draw_Triangles();
@@ -110,6 +112,7 @@ Render any triangles with transparent rendermode needs here
 */
 void DLLEXPORT HUD_DrawTransparentTriangles( void )
 {
+	gFog.HUD_DrawTransparentTriangles();
 #if TEST_IT
 //	Draw_Triangles();
 #endif
