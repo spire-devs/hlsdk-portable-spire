@@ -306,6 +306,7 @@ public:
 	int GetCustomDecalFrames( void );
 
 	void TabulateAmmo( void );
+	virtual void InitializeEntities( void );
 
 	float m_flStartCharge;
 	float m_flAmmoStartCharge;
