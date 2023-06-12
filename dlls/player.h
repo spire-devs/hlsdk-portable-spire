@@ -324,7 +324,6 @@ public:
 	void SetPrefsFromUserinfo( char *infobuffer );
 
 	float m_flNextChatTime;
-	BOOL m_bSendMessages;
 
 	int m_iAutoWepSwitch;
 

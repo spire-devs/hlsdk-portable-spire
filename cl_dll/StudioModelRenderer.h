@@ -96,9 +96,6 @@ public:
 	// Process movement of player
 	virtual void StudioProcessGait( entity_state_t *pplayer );
 
-	// Sets bounding box
-	virtual void StudioGetMinsMaxs ( vec3_t& outMins, vec3_t& outMaxs );
-
 public:
 
 	// Client clock

@@ -19,7 +19,6 @@
 #include "pm_defs.h"
 #include "pmtrace.h"	
 #include "pm_shared.h"
-#include "fog.h"
 
 void Game_AddObjects( void );
 
@@ -533,7 +532,6 @@ void DLLEXPORT HUD_CreateEntities( void )
 #if USE_VGUI
 	GetClientVoiceMgr()->CreateEntities();
 #endif
-gFog.HUD_CreateEntities();
 }
 
 /*

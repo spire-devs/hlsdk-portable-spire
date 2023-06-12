@@ -26,7 +26,6 @@
 #include "shake.h"
 #include "hltv.h"
 #include "view.h"
-#include "fog.h"
 
 // Spectator Mode
 extern "C" 
@@ -1559,7 +1558,6 @@ void DLLEXPORT V_CalcRefdef( struct ref_params_s *pparams )
 	}
 #endif
 */
-gFog.V_CalcRefDef(pparams);
 }
 
 /*

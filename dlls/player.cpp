@@ -185,8 +185,6 @@ int gmsgTeamNames = 0;
 int gmsgStatusText = 0;
 int gmsgStatusValue = 0;
 
-int gmsgFog = 0;
-
 void LinkUserMessages( void )
 {
 	// Already taken care of?
@@ -194,7 +192,7 @@ void LinkUserMessages( void )
 	{
 		return;
 	}
-	gmsgFog = REG_USER_MSG("Fog", 9);
+
 	gmsgSelAmmo = REG_USER_MSG( "SelAmmo", sizeof(SelAmmo) );
 	gmsgCurWeapon = REG_USER_MSG( "CurWeapon", 3 );
 	gmsgGeigerRange = REG_USER_MSG( "Geiger", 1 );
@@ -1097,7 +1095,6 @@ all the ammo we have into the ammo vars.
 */
 void CBasePlayer::TabulateAmmo()
 {
-	virtual void InitializeEntities( void );
 	ammo_9mm = AmmoInventory( GetAmmoIndex( "9mm" ) );
 	ammo_357 = AmmoInventory( GetAmmoIndex( "357" ) );
 	ammo_argrens = AmmoInventory( GetAmmoIndex( "ARgrenades" ) );
@@ -2928,7 +2925,6 @@ void CBasePlayer::Precache( void )
 		m_fInitHUD = TRUE;
 
 	pev->fov = m_iFOV;	// Vit_amiN: restore the FOV on level change or map/saved game load
-	m_bSendMessages = TRUE;
 }
 
 int CBasePlayer::Save( CSave &save )
@@ -3875,12 +3871,6 @@ reflecting all of the HUD state info.
 */
 void CBasePlayer::UpdateClientData( void )
 {
-	if( m_bSendMessages )
-	{
-    	InitializeEntities();
-    	m_bSendMessages = FALSE;
-	}
-
 	if( m_fInitHUD )
 	{
 		m_fInitHUD = FALSE;
@@ -4121,27 +4111,6 @@ void CBasePlayer::UpdateClientData( void )
 		UpdateStatusBar();
 		m_flNextSBarUpdateTime = gpGlobals->time + 0.2f;
 	}
-}
-
-//=========================================================
-// InitializeEntities
-//=========================================================
-void CBasePlayer :: InitializeEntities ( void )
-{
-    edict_t* pEdict = g_engfuncs.pfnPEntityOfEntIndex( 1 );
-    CBaseEntity* pEntity;
-
-    for(int i = 0; i < gpGlobals->maxEntities; i++, pEdict++)
-    {
-        if(pEdict->free)
-            continue;
-
-        pEntity = CBaseEntity::Instance( pEdict );
-        if(!pEntity)
-            break;
-
-        pEntity->SendInitMessages(this);
-    }
 }
 
 //=========================================================
