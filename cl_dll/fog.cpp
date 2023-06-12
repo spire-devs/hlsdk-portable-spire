@@ -13,7 +13,7 @@
 *
 ****/
 
-#include "windows.h"
+//#include "windows.h"
 #include "hud.h"
 #include "cl_util.h"
 #include "parsemsg.h"
@@ -30,7 +30,7 @@
 #include "pm_defs.h"
 #include "fog.h"
 
-#include "gl/gl.h"
+//#include "gl/gl.h"
 
 #include "const.h"
 #include "entity_state.h"
