@@ -55,18 +55,18 @@ extern DLL_GLOBAL int		g_iSkillLevel;
 #define HGRUNT_LIMP_HEALTH				20
 #define HGRUNT_DMG_HEADSHOT				( DMG_BULLET | DMG_CLUB )	// damage types that can kill a grunt with a single headshot.
 #define HGRUNT_NUM_HEADS				2 // how many grunt heads are there? 
-#define HGRUNT_MINIMUM_HEADSHOT_DAMAGE			15 // must do at least this much damage in one shot to head to score a headshot kill
-#define	HGRUNT_SENTENCE_VOLUME				(float)0.35 // volume of grunt sentences
+#define HGRUNT_MINIMUM_HEADSHOT_DAMAGE	15 // must do at least this much damage in one shot to head to score a headshot kill
+#define	HGRUNT_SENTENCE_VOLUME			(float)0.35 // volume of grunt sentences
 
 #define HGRUNT_9MMAR				( 1 << 0)
 #define HGRUNT_HANDGRENADE			( 1 << 1)
-#define HGRUNT_GRENADELAUNCHER			( 1 << 2)
+#define HGRUNT_GRENADELAUNCHER		( 1 << 2)
 #define HGRUNT_SHOTGUN				( 1 << 3)
 
 #define HEAD_GROUP					1
 #define HEAD_GRUNT					0
-#define HEAD_COMMANDER					1
-#define HEAD_SHOTGUN					2
+#define HEAD_COMMANDER				1
+#define HEAD_SHOTGUN				2
 #define HEAD_M203					3
 #define GUN_GROUP					2
 #define GUN_MP5						0
@@ -82,9 +82,9 @@ extern DLL_GLOBAL int		g_iSkillLevel;
 #define		HGRUNT_AE_BURST2		( 5 ) 
 #define		HGRUNT_AE_BURST3		( 6 ) 
 #define		HGRUNT_AE_GREN_TOSS		( 7 )
-#define		HGRUNT_AE_GREN_LAUNCH		( 8 )
+#define		HGRUNT_AE_GREN_LAUNCH	( 8 )
 #define		HGRUNT_AE_GREN_DROP		( 9 )
-#define		HGRUNT_AE_CAUGHT_ENEMY		( 10 ) // grunt established sight with an enemy (player only) that had previously eluded the squad.
+#define		HGRUNT_AE_CAUGHT_ENEMY	( 10 ) // grunt established sight with an enemy (player only) that had previously eluded the squad.
 #define		HGRUNT_AE_DROP_GUN		( 11 ) // grunt (probably dead) is dropping his mp5.
 
 //=========================================================
@@ -878,14 +878,14 @@ void CHGrunt::HandleAnimEvent( MonsterEvent_t *pEvent )
 				{
 					DropItem( "ammo_ARgrenades", BodyTarget( pev->origin ), vecGunAngles );
 				}
-			}
+			
 		}
 			break;
-		case HGRUNT_AE_RELOAD:
+		case HGRUNT_AE_RELOAD: {
 			EMIT_SOUND( ENT( pev ), CHAN_WEAPON, "hgrunt/gr_reload1.wav", 1, ATTN_NORM );
 			m_cAmmoLoaded = m_cClipSize;
 			ClearConditions( bits_COND_NO_AMMO_LOADED );
-			break;
+		}	break;
 		case HGRUNT_AE_GREN_TOSS:
 		{
 			UTIL_MakeVectors( pev->angles );
@@ -910,8 +910,8 @@ void CHGrunt::HandleAnimEvent( MonsterEvent_t *pEvent )
 			m_fThrowGrenade = FALSE;
 			m_flNextGrenadeCheck = gpGlobals->time + 6;// wait six seconds before even looking again to see if a grenade can be thrown.
 			// !!!LATER - when in a group, only try to throw grenade if ordered.
-		}
-			break;
+		
+		}	break;
 		case HGRUNT_AE_GREN_LAUNCH:
 		{
 			EMIT_SOUND( ENT( pev ), CHAN_WEAPON, "weapons/glauncher.wav", 0.8, ATTN_NORM );
@@ -936,14 +936,14 @@ void CHGrunt::HandleAnimEvent( MonsterEvent_t *pEvent )
 				m_flNextGrenadeCheck = gpGlobals->time + RANDOM_FLOAT( 2.0f, 5.0f );// wait a random amount of time before shooting again
 			else
 				m_flNextGrenadeCheck = gpGlobals->time + 6.0f;// wait six seconds before even looking again to see if a grenade can be thrown.
-		}
-			break;
+		
+		}	break;
 		case HGRUNT_AE_GREN_DROP:
 		{
 			UTIL_MakeVectors( pev->angles );
 			CGrenade::ShootTimed( pev, pev->origin + gpGlobals->v_forward * 17 - gpGlobals->v_right * 27 + gpGlobals->v_up * 6, g_vecZero, 3 );
-		}
-			break;
+		
+		}	break;
 		case HGRUNT_AE_BURST1:
 		{
 			if( FBitSet( pev->weapons, HGRUNT_9MMAR ) )
@@ -975,12 +975,13 @@ void CHGrunt::HandleAnimEvent( MonsterEvent_t *pEvent )
 			}
 
 			CSoundEnt::InsertSound( bits_SOUND_COMBAT, pev->origin, 384, 0.3 );
-		}
-			break;
+		
+		}	break;
 		case HGRUNT_AE_BURST2:
 		case HGRUNT_AE_BURST3:
+		{
 			Shoot();
-			break;
+		}	break;
 		case HGRUNT_AE_KICK:
 		{
 			CBaseEntity *pHurt = Kick();
@@ -993,8 +994,8 @@ void CHGrunt::HandleAnimEvent( MonsterEvent_t *pEvent )
 				pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_forward * 100 + gpGlobals->v_up * 50;
 				pHurt->TakeDamage( pev, pev, gSkillData.hgruntDmgKick, DMG_CLUB );
 			}
-		}
-			break;
+		
+		}	break;
 		case HGRUNT_AE_CAUGHT_ENEMY:
 		{
 			if( FOkToSpeak() )
@@ -1003,8 +1004,8 @@ void CHGrunt::HandleAnimEvent( MonsterEvent_t *pEvent )
 				JustSpoke();
 			}
 
-		}
-			break;
+		
+		}	break;
 		default:
 			CSquadMonster::HandleAnimEvent( pEvent );
 			break;
