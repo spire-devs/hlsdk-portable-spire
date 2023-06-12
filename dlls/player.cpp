@@ -48,8 +48,6 @@ int gEvilImpulse101;
 BOOL g_markFrameBounds = 0; //LRC
 extern DLL_GLOBAL int g_iSkillLevel, gDisplayTitle;
 
-extern "C" int g_bhopcap;
-
 BOOL gInitHUD = TRUE;
 
 extern void CopyToBodyQue( entvars_t *pev);
@@ -127,7 +125,6 @@ TYPEDESCRIPTION	CBasePlayer::m_playerSaveData[] =
 	DEFINE_FIELD( CBasePlayer, m_pTank, FIELD_EHANDLE ), // NB: this points to a CFuncTank*Controls* now. --LRC
 	DEFINE_FIELD( CBasePlayer, m_iHideHUD, FIELD_INTEGER ),
 	DEFINE_FIELD( CBasePlayer, m_iFOV, FIELD_INTEGER ),
-
 	//LRC
 //	DEFINE_FIELD( CBasePlayer, m_iFogStartDist, FIELD_INTEGER ),
 //	DEFINE_FIELD( CBasePlayer, m_iFogEndDist, FIELD_INTEGER ),
@@ -3009,6 +3006,8 @@ void CBasePlayer::Spawn( void )
 
 	g_engfuncs.pfnSetPhysicsKeyValue( edict(), "slj", "0" );
 	g_engfuncs.pfnSetPhysicsKeyValue( edict(), "hl", "1" );
+	g_engfuncs.pfnSetPhysicsKeyValue( edict(), "fr", "1" );
+	g_engfuncs.pfnSetPhysicsKeyValue( edict(), "bj", bhopcap.value ? "0" : "1" );
 
 	pev->fov = m_iFOV = 0;// init field of view.
 	m_iClientFOV = -1; // make sure fov reset is sent
@@ -3571,7 +3570,6 @@ void CBasePlayer::ForceClientDllUpdate( void )
 	m_fWeapon = FALSE;          // Force weapon send
 	m_fKnownItem = FALSE;    // Force weaponinit messages.
 	m_fInitHUD = TRUE;		// Force HUD gmsgResetHUD message
-	m_bSentBhopcap = true; // a1ba: Update bhopcap state
 	memset( m_rgAmmoLast, 0, sizeof( m_rgAmmoLast )); // a1ba: Force update AmmoX
 
 
@@ -3747,6 +3745,7 @@ void CBasePlayer::CheatImpulseCommands( int iImpulse )
 		GiveNamedItem( "weapon_snark" );
 		GiveNamedItem( "weapon_hornetgun" );
 #endif
+		GiveNamedItem( "weapon_iceaxe" );
 		gEvilImpulse101 = FALSE;
 		break;
 	case 102:
@@ -4372,15 +4371,6 @@ void CBasePlayer::UpdateClientData( void )
 	{
 		UpdateStatusBar();
 		m_flNextSBarUpdateTime = gpGlobals->time + 0.2f;
-	}
-
-	// Send the current bhopcap state.
-	if( !m_bSentBhopcap )
-	{
-		m_bSentBhopcap = true;
-		MESSAGE_BEGIN( MSG_ONE, gmsgBhopcap, NULL, pev );
-			WRITE_BYTE( g_bhopcap );
-		MESSAGE_END();
 	}
 }
 

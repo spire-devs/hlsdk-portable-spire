@@ -296,6 +296,11 @@ cvar_t	sk_plr_crowbar1 = {"sk_plr_crowbar1","0"};
 cvar_t	sk_plr_crowbar2 = {"sk_plr_crowbar2","0"};
 cvar_t	sk_plr_crowbar3 = {"sk_plr_crowbar3","0"};
 
+// Iceaxe thwang
+cvar_t	sk_plr_iceaxe1 = {"sk_plr_iceaxe1","0"};
+cvar_t	sk_plr_iceaxe2 = {"sk_plr_iceaxe2","0"};
+cvar_t	sk_plr_iceaxe3 = {"sk_plr_iceaxe3","0"};
+
 // Glock Round
 cvar_t	sk_plr_9mm_bullet1 = {"sk_plr_9mm_bullet1","0"};
 cvar_t	sk_plr_9mm_bullet2 = {"sk_plr_9mm_bullet2","0"};
@@ -736,6 +741,13 @@ void GameDLLInit( void )
 	CVAR_REGISTER( &sk_plr_crowbar1 );// {"sk_plr_crowbar1","0"};
 	CVAR_REGISTER( &sk_plr_crowbar2 );// {"sk_plr_crowbar2","0"};
 	CVAR_REGISTER( &sk_plr_crowbar3 );// {"sk_plr_crowbar3","0"};
+	
+	
+	// Iceaxe thwang
+	CVAR_REGISTER( &sk_plr_iceaxe1 );// {"sk_plr_iceaxe1","0"};
+	CVAR_REGISTER( &sk_plr_iceaxe2 );// {"sk_plr_iceaxe2","0"};
+	CVAR_REGISTER( &sk_plr_iceaxe3 );// {"sk_plr_iceaxe3","0"};
+
 
 	// Glock Round
 	CVAR_REGISTER( &sk_plr_9mm_bullet1 );// {"sk_plr_9mm_bullet1","0"};

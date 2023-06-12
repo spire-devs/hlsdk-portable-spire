@@ -125,6 +125,12 @@ typedef void(CBaseEntity::*USEPTR)( CBaseEntity *pActivator, CBaseEntity *pCalle
 #define CLASS_FACTION_A			14 //LRC - very simple new classes, for use with Behaves As
 #define CLASS_FACTION_B			15
 #define CLASS_FACTION_C			16
+#define	CLASS_CITIZEN_PASSIVE		14
+#define CLASS_CITIZEN_MILITARY		15
+#define CLASS_WARRIOR_MILITARY		16
+#define CLASS_WARRIOR_BIOWEAPON		17
+#define CLASS_WARRIOR_MONSTER		18
+#define CLASS_SPY_MILITARY		19
 #define	CLASS_BARNACLE			99 // special because no one pays attention to it, and it eats a wide cross-section of creatures.
 
 class CBaseEntity;

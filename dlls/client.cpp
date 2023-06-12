@@ -58,9 +58,6 @@ extern cvar_t multibyte_only;
 
 extern int g_teamplay;
 
-extern cvar_t bhopcap;
-extern "C" int g_bhopcap;
-
 void LinkUserMessages( void );
 
 /*
@@ -133,6 +130,7 @@ void ClientDisconnect( edict_t *pEntity )
 	pEntity->v.takedamage = DAMAGE_NO;// don't attract autoaim
 	pEntity->v.solid = SOLID_NOT;// nonsolid
 	pEntity->v.effects = 0;// clear any effect
+	pEntity->v.flags = 0;// clear any flags
 	UTIL_SetEdictOrigin ( pEntity, pEntity->v.origin );
 
 	g_pGameRules->ClientDisconnected( pEntity );
