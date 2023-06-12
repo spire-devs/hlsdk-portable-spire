@@ -33,26 +33,25 @@ enum iceaxe_e
 {
 	ICEAXE_IDLE = 0,
 	ICEAXE_DRAW,
-	ICEAXE_HOLSTER,
 	ICEAXE_ATTACK1HIT,
 	ICEAXE_ATTACK1MISS,
 	ICEAXE_ATTACK2MISS,
 	ICEAXE_ATTACK2HIT,
 	ICEAXE_ATTACK3MISS,
-#if !ICEAXE_IDLE_ANIM	
-	ICEAXE_ATTACK3HIT
-#else
 	ICEAXE_ATTACK3HIT,
-	ICEAXE_IDLE2,
-	ICEAXE_IDLE3
-#endif
+	ICEAXE_BIG_ATTACK1MISS,
+	ICEAXE_BIG_ATTACK1HIT,
+	ICEAXE_BIG_ATTACK2MISS,
+	ICEAXE_BIG_ATTACK2HIT,
+	ICEAXE_BIG_ATTACK3MISS,
+	ICEAXE_BIG_ATTACK3HIT
 };
 
 void CIceaxe::Spawn()
 {
 	Precache();
 	m_iId = WEAPON_ICEAXE;
-	SET_MODEL( ENT( pev ), "models/w_crowbar.mdl" );
+	SET_MODEL( ENT( pev ), "models/w_iceaxe.mdl" );
 	m_iClip = -1;
 
 	FallInit();// get ready to fall down.
@@ -60,17 +59,15 @@ void CIceaxe::Spawn()
 
 void CIceaxe::Precache( void )
 {
-	PRECACHE_MODEL( "models/v_crowbar.mdl" );
-	PRECACHE_MODEL( "models/w_crowbar.mdl" );
+	PRECACHE_MODEL( "models/v_iceaxe.mdl" );
+	PRECACHE_MODEL( "models/w_iceaxe.mdl" );
 	PRECACHE_MODEL( "models/p_crowbar.mdl" );
-	PRECACHE_SOUND( "weapons/cbar_hit1.wav" );
-	PRECACHE_SOUND( "weapons/cbar_hit2.wav" );
-	PRECACHE_SOUND( "weapons/cbar_hitbod1.wav" );
-	PRECACHE_SOUND( "weapons/cbar_hitbod2.wav" );
-	PRECACHE_SOUND( "weapons/cbar_hitbod3.wav" );
-	PRECACHE_SOUND( "weapons/cbar_miss1.wav" );
+	PRECACHE_SOUND( "weapons/iceaxe_impact1.wav" );
+	PRECACHE_SOUND( "weapons/iceaxe_impact2.wav" );
+	PRECACHE_SOUND( "weapons/iceaxe_swing1.wav" );
+	PRECACHE_SOUND( "weapons/iceaxe_swing2.wav" );
 
-	m_usIceaxe = PRECACHE_EVENT( 1, "events/crowbar.sc" );
+	m_usIceaxe = PRECACHE_EVENT( 1, "events/iceaxe.sc" );
 }
 
 int CIceaxe::GetItemInfo( ItemInfo *p )
@@ -102,13 +99,13 @@ int CIceaxe::AddToPlayer( CBasePlayer *pPlayer )
 
 BOOL CIceaxe::Deploy()
 {
-	return DefaultDeploy( "models/v_crowbar.mdl", "models/p_crowbar.mdl", ICEAXE_DRAW, "crowbar" );
+	return DefaultDeploy( "models/v_iceaxe.mdl", "models/p_crowbar.mdl", ICEAXE_DRAW, "crowbar" );
 }
 
 void CIceaxe::Holster( int skiplocal /* = 0 */ )
 {
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.5f;
-	SendWeaponAnim( ICEAXE_HOLSTER );
+	//SendWeaponAnim( ICEAXE_HOLSTER );
 }
 
 void CIceaxe::PrimaryAttack()
@@ -171,10 +168,8 @@ int CIceaxe::Swing( int fFirst )
 		if( fFirst )
 		{
 			// miss
-			m_flNextPrimaryAttack = GetNextAttackDelay( 0.5 );
-#if CROWBAR_IDLE_ANIM
-			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + UTIL_SharedRandomFloat( m_pPlayer->random_seed, 10, 15 );
-#endif
+			m_flNextPrimaryAttack = GetNextAttackDelay( 0.25 );
+			
 			// player "shoot" animation
 			m_pPlayer->SetAnimation( PLAYER_ATTACK1 );
 		}
@@ -231,16 +226,13 @@ int CIceaxe::Swing( int fFirst )
 			if( pEntity->Classify() != CLASS_NONE && pEntity->Classify() != CLASS_MACHINE )
 			{
 				// play thwack or smack sound
-				switch( RANDOM_LONG( 0, 2 ) )
+				switch( RANDOM_LONG( 0, 1 ) )
 				{
 				case 0:
-					EMIT_SOUND( ENT( m_pPlayer->pev ), CHAN_ITEM, "weapons/cbar_hitbod1.wav", 1.0f, ATTN_NORM );
+					EMIT_SOUND( ENT( m_pPlayer->pev ), CHAN_ITEM, "weapons/iceaxe_impact1.wav", 1.0f, ATTN_NORM );
 					break;
 				case 1:
-					EMIT_SOUND( ENT( m_pPlayer->pev ), CHAN_ITEM, "weapons/cbar_hitbod2.wav", 1.0f, ATTN_NORM );
-					break;
-				case 2:
-					EMIT_SOUND( ENT( m_pPlayer->pev ), CHAN_ITEM, "weapons/cbar_hitbod3.wav", 1.0f, ATTN_NORM );
+					EMIT_SOUND( ENT( m_pPlayer->pev ), CHAN_ITEM, "weapons/iceaxe_impact2.wav", 1.0f, ATTN_NORM );
 					break;
 				}
 
@@ -248,9 +240,7 @@ int CIceaxe::Swing( int fFirst )
 
 				if( !pEntity->IsAlive() )
 				{
-#if CROWBAR_FIX_RAPID_CROWBAR
 					m_flNextPrimaryAttack = GetNextAttackDelay(0.25);
-#endif
 					return TRUE;
 				}
 				else
@@ -279,10 +269,10 @@ int CIceaxe::Swing( int fFirst )
 			switch( RANDOM_LONG( 0, 1 ) )
 			{
 			case 0:
-				EMIT_SOUND_DYN( ENT( m_pPlayer->pev ), CHAN_ITEM, "weapons/cbar_hit1.wav", fvolbar, ATTN_NORM, 0, 98 + RANDOM_LONG( 0, 3 ) ); 
+				EMIT_SOUND_DYN( ENT( m_pPlayer->pev ), CHAN_ITEM, "weapons/iceaxe_impact1.wav", fvolbar, ATTN_NORM, 0, 98 + RANDOM_LONG( 0, 3 ) ); 
 				break;
 			case 1:
-				EMIT_SOUND_DYN( ENT( m_pPlayer->pev ), CHAN_ITEM, "weapons/cbar_hit2.wav", fvolbar, ATTN_NORM, 0, 98 + RANDOM_LONG( 0, 3 ) );
+				EMIT_SOUND_DYN( ENT( m_pPlayer->pev ), CHAN_ITEM, "weapons/iceaxe_impact2.wav", fvolbar, ATTN_NORM, 0, 98 + RANDOM_LONG( 0, 3 ) );
 				break;
 			}
 
@@ -293,46 +283,9 @@ int CIceaxe::Swing( int fFirst )
 		m_pPlayer->m_iWeaponVolume = (int)( flVol * ICEAXE_WALLHIT_VOLUME );
 
 		SetThink( &CIceaxe::Smack );
-		pev->nextthink = gpGlobals->time + 0.2f;
+		pev->nextthink = gpGlobals->time + 0.1f;
 #endif
-#if CROWBAR_DELAY_FIX
-		m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.25f;
-#else
-		m_flNextPrimaryAttack = GetNextAttackDelay( 0.25f );
-#endif
+		m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.125f;
 	}
-#if CROWBAR_IDLE_ANIM
-	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + UTIL_SharedRandomFloat( m_pPlayer->random_seed, 10, 15 );
-#endif
 	return fDidHit;
 }
-
-#if CROWBAR_IDLE_ANIM
-void CIceaxe::WeaponIdle( void )
-{
-	if( m_flTimeWeaponIdle < UTIL_WeaponTimeBase() )
-	{
-		int iAnim;
-		float flRand = UTIL_SharedRandomFloat( m_pPlayer->random_seed, 0, 1 );
-		if( flRand > 0.9f )
-		{
-			iAnim = ICEAXE_IDLE2;
-			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 160.0f / 30.0f;
-		}
-		else
-		{
-			if( flRand > 0.5f )
-			{
-				iAnim = ICEAXE_IDLE;
-				m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 70.0f / 25.0f;
-			}
-			else
-			{
-				iAnim = ICEAXE_IDLE3;
-				m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 160.0f / 30.0f;
-			}
-		}
-		SendWeaponAnim( iAnim );
-	}
-}
-#endif

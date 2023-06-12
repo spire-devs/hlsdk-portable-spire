@@ -108,18 +108,18 @@ typedef void(CBaseEntity::*ENTITYFUNCPTR)( CBaseEntity *pOther );
 typedef void(CBaseEntity::*USEPTR)( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
 
 // For CLASSIFY
-#define	CLASS_NONE			0
-#define CLASS_MACHINE			1
-#define CLASS_PLAYER			2
-#define	CLASS_HUMAN_PASSIVE		3
+#define	CLASS_NONE					0
+#define CLASS_MACHINE				1
+#define CLASS_PLAYER				2
+#define	CLASS_HUMAN_PASSIVE			3
 #define CLASS_HUMAN_MILITARY		4
 #define CLASS_ALIEN_MILITARY		5
-#define CLASS_ALIEN_PASSIVE		6
-#define CLASS_ALIEN_MONSTER		7
-#define CLASS_ALIEN_PREY		8
+#define CLASS_ALIEN_PASSIVE			6
+#define CLASS_ALIEN_MONSTER			7
+#define CLASS_ALIEN_PREY			8
 #define CLASS_ALIEN_PREDATOR		9
-#define CLASS_INSECT			10
-#define CLASS_PLAYER_ALLY		11
+#define CLASS_INSECT				10
+#define CLASS_PLAYER_ALLY			11
 #define CLASS_PLAYER_BIOWEAPON		12 // hornets and snarks.launched by players
 #define CLASS_ALIEN_BIOWEAPON		13 // hornets and snarks.launched by the alien menace
 #define CLASS_FACTION_A			14 //LRC - very simple new classes, for use with Behaves As
@@ -130,9 +130,9 @@ typedef void(CBaseEntity::*USEPTR)( CBaseEntity *pActivator, CBaseEntity *pCalle
 #define CLASS_WARRIOR_MILITARY		16
 #define CLASS_WARRIOR_BIOWEAPON		17
 #define CLASS_WARRIOR_MONSTER		18
-#define CLASS_SPY_MILITARY		19
-#define	CLASS_BARNACLE			99 // special because no one pays attention to it, and it eats a wide cross-section of creatures.
-
+#define CLASS_SPY_MILITARY			19
+#define CLASS_STALKER				20
+#define	CLASS_BARNACLE				99 // special because no one pays attention to it, and it eats a wide cross-section of creatures.
 class CBaseEntity;
 class CBaseMonster;
 class CBasePlayerItem;
