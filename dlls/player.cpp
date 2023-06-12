@@ -1097,6 +1097,7 @@ all the ammo we have into the ammo vars.
 */
 void CBasePlayer::TabulateAmmo()
 {
+	virtual void InitializeEntities( void );
 	ammo_9mm = AmmoInventory( GetAmmoIndex( "9mm" ) );
 	ammo_357 = AmmoInventory( GetAmmoIndex( "357" ) );
 	ammo_argrens = AmmoInventory( GetAmmoIndex( "ARgrenades" ) );
