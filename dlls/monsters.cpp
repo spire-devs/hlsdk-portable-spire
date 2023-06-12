@@ -520,18 +520,6 @@ void CBaseMonster::MonsterThink( void )
 {
 	pev->nextthink = gpGlobals->time + 0.1f;// keep monster thinking.
 
-	int fogEndDist = CEnvFog::GetCurrentEndDist();
-	if(fogEndDist > 0)
-	{
-    m_flDistTooFar = fogEndDist - 100;
-    m_flDistLook = fogEndDist + 300;
-	}
-	else
-	{
-    m_flDistTooFar = 1024.0;
-    m_flDistLook = 2048.0;
-	}
-
 	RunAI();
 
 	float flInterval = StudioFrameAdvance( ); // animate
@@ -2026,6 +2014,9 @@ void CBaseMonster::MonsterInit( void )
 
 	m_hEnemy = NULL;
 
+	m_flDistTooFar = 1024.0f;
+	m_flDistLook = 2048.0f;
+
 	// set eye position
 	SetEyePosition();
 
@@ -2183,28 +2174,29 @@ int CBaseMonster::TaskIsRunning( void )
 //=========================================================
 int CBaseMonster::IRelationship( CBaseEntity *pTarget )
 {
-	static int iEnemy[20][20] =
-	{			 //   NONE	 MACH	 PLYR	 HPASS	 HMIL	 AMIL	 APASS	 AMONST	APREY	 APRED	 INSECT	PLRALY	PBWPN	ABWPN	CPASS	CMIL	WMIL	WBWPN	WMONST	SMIL
-	/*NONE*/		{ R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	},
-	/*MACH*/		{ R_NO	,R_NO	,R_DL	,R_DL	,R_NO	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_NO	,R_DL	,R_DL	,R_DL	,R_NO	,R_NO	,R_DL	,R_DL	,R_HT	,R_DL	},
-	/*PLYR*/		{ R_NO	,R_DL	,R_NO	,R_NO	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_NO	,R_NO	,R_DL	,R_DL	,R_NO	,R_NO	,R_DL	,R_DL	,R_DL	,R_DL	},
-	/*HPASS*/		{ R_NO	,R_NO	,R_AL	,R_AL	,R_HT	,R_FR	,R_NO	,R_HT	,R_DL	,R_FR	,R_NO	,R_AL	,R_NO	,R_NO	,R_AL	,R_AL	,R_FR	,R_FR	,R_FR	,R_FR	},
-	/*HMIL*/		{ R_NO	,R_NO	,R_HT	,R_DL	,R_NO	,R_HT	,R_DL	,R_DL	,R_DL	,R_DL	,R_NO	,R_HT	,R_NO	,R_NO	,R_AL	,R_AL	,R_DL	,R_DL	,R_HT	,R_DL	},
-	/*AMIL*/		{ R_NO	,R_DL	,R_HT	,R_DL	,R_HT	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_DL	,R_NO	,R_NO	,R_DL	,R_DL	,R_DL	,R_DL	,R_HT	,R_DL	},
-	/*APASS*/		{ R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	},
-	/*AMONST*/		{ R_NO	,R_DL	,R_DL	,R_DL	,R_DL	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_DL	,R_NO	,R_NO	,R_DL	,R_DL	,R_DL	,R_HT	,R_DL	,R_DL	},
-	/*APREY*/		{ R_NO	,R_NO	,R_DL	,R_DL	,R_DL	,R_NO	,R_NO	,R_NO	,R_NO	,R_FR	,R_NO	,R_DL	,R_NO	,R_NO	,R_DL	,R_DL	,R_DL	,R_FR	,R_FR	,R_DL	},
-	/*APRED*/		{ R_NO	,R_NO	,R_DL	,R_DL	,R_DL	,R_NO	,R_NO	,R_NO	,R_HT	,R_DL	,R_NO	,R_DL	,R_NO	,R_NO	,R_DL	,R_DL	,R_DL	,R_HT	,R_FR	,R_DL	},
-	/*INSECT*/		{ R_FR	,R_FR	,R_FR	,R_FR	,R_FR	,R_NO	,R_FR	,R_FR	,R_FR	,R_FR	,R_NO	,R_FR	,R_NO	,R_NO	,R_FR	,R_FR	,R_FR	,R_NO	,R_FR	,R_FR	},
-	/*PLRALY*/		{ R_NO	,R_DL	,R_AL	,R_AL	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_NO	,R_NO	,R_NO	,R_NO	,R_AL	,R_AL	,R_DL	,R_DL	,R_HT	,R_DL	},
-	/*PBWPN*/		{ R_NO	,R_NO	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_NO	,R_DL	,R_NO	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	},
-	/*ABWPN*/		{ R_NO	,R_NO	,R_DL	,R_DL	,R_DL	,R_AL	,R_NO	,R_DL	,R_DL	,R_NO	,R_NO	,R_DL	,R_DL	,R_NO	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	},
-	/*CPASS*/		{ R_NO	,R_NO	,R_AL	,R_AL	,R_HT	,R_FR	,R_NO	,R_HT	,R_DL	,R_FR	,R_NO	,R_AL	,R_NO	,R_NO	,R_AL	,R_AL	,R_FR	,R_FR	,R_FR	,R_FR	},
-	/*CMIL*/		{ R_NO	,R_DL	,R_AL	,R_AL	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_NO	,R_NO	,R_NO	,R_NO	,R_AL	,R_AL	,R_DL	,R_DL	,R_HT	,R_HT	},
-	/*WMIL*/		{ R_NO	,R_DL	,R_HT	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_NO	,R_DL	,R_NO	,R_NO	,R_DL	,R_HT	,R_AL	,R_AL	,R_AL	,R_AL	},
-	/*WBWPN*/		{ R_NO	,R_DL	,R_HT	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_NO	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_AL	,R_AL	,R_AL	,R_AL	},
-	/*WMONST*/		{ R_NO	,R_DL	,R_HT	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_NO	,R_DL	,R_NO	,R_NO	,R_DL	,R_DL	,R_AL	,R_AL	,R_AL	,R_AL	},
-	/*SMIL*/		{ R_NO	,R_DL	,R_HT	,R_DL	,R_HT	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_NO	,R_DL	,R_DL	,R_NO	,R_DL	,R_HT	,R_AL	,R_AL	,R_AL	,R_AL	}
+	static int iEnemy[21][21] =
+	{			 //   NONE	 MACH	 PLYR	 HPASS	 HMIL	 AMIL	 APASS	 AMONST	APREY	 APRED	 INSECT	PLRALY	PBWPN	ABWPN	CPASS	CMIL	WMIL	WBWPN	WMONST	SMIL	STLK
+	/*NONE*/		{ R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	},
+	/*MACH*/		{ R_NO	,R_NO	,R_DL	,R_DL	,R_NO	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_NO	,R_DL	,R_DL	,R_DL	,R_NO	,R_NO	,R_DL	,R_DL	,R_HT	,R_DL	,R_DL	},
+	/*PLYR*/		{ R_NO	,R_DL	,R_NO	,R_NO	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_NO	,R_NO	,R_DL	,R_DL	,R_NO	,R_NO	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	},
+	/*HPASS*/		{ R_NO	,R_NO	,R_AL	,R_AL	,R_HT	,R_FR	,R_NO	,R_HT	,R_DL	,R_FR	,R_NO	,R_AL	,R_NO	,R_NO	,R_AL	,R_AL	,R_FR	,R_FR	,R_FR	,R_FR	,R_FR	},
+	/*HMIL*/		{ R_NO	,R_NO	,R_HT	,R_DL	,R_NO	,R_HT	,R_DL	,R_DL	,R_DL	,R_DL	,R_NO	,R_HT	,R_NO	,R_NO	,R_AL	,R_AL	,R_DL	,R_DL	,R_HT	,R_DL	,R_DL	},
+	/*AMIL*/		{ R_NO	,R_DL	,R_HT	,R_DL	,R_HT	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_DL	,R_NO	,R_NO	,R_DL	,R_DL	,R_DL	,R_DL	,R_HT	,R_DL	,R_DL	},
+	/*APASS*/		{ R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_DL	},
+	/*AMONST*/		{ R_NO	,R_DL	,R_DL	,R_DL	,R_DL	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_DL	,R_NO	,R_NO	,R_DL	,R_DL	,R_DL	,R_HT	,R_DL	,R_DL	,R_DL	},
+	/*APREY*/		{ R_NO	,R_NO	,R_DL	,R_DL	,R_DL	,R_NO	,R_NO	,R_NO	,R_NO	,R_FR	,R_NO	,R_DL	,R_NO	,R_NO	,R_DL	,R_DL	,R_DL	,R_FR	,R_FR	,R_DL	,R_DL	},
+	/*APRED*/		{ R_NO	,R_NO	,R_DL	,R_DL	,R_DL	,R_NO	,R_NO	,R_NO	,R_HT	,R_DL	,R_NO	,R_DL	,R_NO	,R_NO	,R_DL	,R_DL	,R_DL	,R_HT	,R_FR	,R_DL	,R_DL	},
+	/*INSECT*/		{ R_FR	,R_FR	,R_FR	,R_FR	,R_FR	,R_NO	,R_FR	,R_FR	,R_FR	,R_FR	,R_NO	,R_FR	,R_NO	,R_NO	,R_FR	,R_FR	,R_FR	,R_NO	,R_FR	,R_FR	,R_FR	},
+	/*PLRALY*/		{ R_NO	,R_DL	,R_AL	,R_AL	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_NO	,R_NO	,R_NO	,R_NO	,R_AL	,R_AL	,R_DL	,R_DL	,R_HT	,R_DL	,R_DL	},
+	/*PBWPN*/		{ R_NO	,R_NO	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_NO	,R_DL	,R_NO	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	},
+	/*ABWPN*/		{ R_NO	,R_NO	,R_DL	,R_DL	,R_DL	,R_AL	,R_NO	,R_DL	,R_DL	,R_NO	,R_NO	,R_DL	,R_DL	,R_NO	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	},
+	/*CPASS*/		{ R_NO	,R_NO	,R_AL	,R_AL	,R_HT	,R_FR	,R_NO	,R_HT	,R_DL	,R_FR	,R_NO	,R_AL	,R_NO	,R_NO	,R_AL	,R_AL	,R_FR	,R_FR	,R_FR	,R_FR	,R_FR	},
+	/*CMIL*/		{ R_NO	,R_DL	,R_AL	,R_AL	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_NO	,R_NO	,R_NO	,R_NO	,R_AL	,R_AL	,R_DL	,R_DL	,R_HT	,R_HT	,R_DL	},
+	/*WMIL*/		{ R_NO	,R_DL	,R_HT	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_NO	,R_DL	,R_NO	,R_NO	,R_DL	,R_HT	,R_AL	,R_AL	,R_AL	,R_AL	,R_AL	},
+	/*WBWPN*/		{ R_NO	,R_DL	,R_HT	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_NO	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_AL	,R_AL	,R_AL	,R_AL	,R_AL	},
+	/*WMONST*/		{ R_NO	,R_DL	,R_HT	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_NO	,R_DL	,R_NO	,R_NO	,R_DL	,R_DL	,R_AL	,R_AL	,R_AL	,R_AL	,R_AL	},
+	/*SMIL*/		{ R_NO	,R_DL	,R_HT	,R_DL	,R_HT	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_NO	,R_DL	,R_DL	,R_NO	,R_DL	,R_HT	,R_AL	,R_AL	,R_AL	,R_AL	,R_AL	},
+	/*STLK*/		{ R_NO	,R_FR	,R_DL	,R_DL	,R_HT	,R_DL	,R_DL	,R_DL	,R_DL	,R_DL	,R_NO	,R_DL	,R_FR	,R_FR	,R_DL	,R_HT	,R_AL	,R_AL	,R_AL	,R_AL	,R_AL	}
 	};
 
 	return iEnemy[Classify()][pTarget->Classify()];

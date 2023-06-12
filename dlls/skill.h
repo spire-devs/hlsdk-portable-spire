@@ -40,6 +40,11 @@ struct skilldata_t
 	float bullsquidDmgBite;
 	float bullsquidDmgWhip;
 	float bullsquidDmgSpit;
+	
+	float conscriptHealth;
+	float conscriptDmgKick;
+	float conscriptShotgunPellets;
+	float conscriptGrenadeSpeed;
 
 	float gargantuaHealth;
 	float gargantuaDmgSlash;
@@ -94,7 +99,6 @@ struct skilldata_t
 
 	// Player Weapons
 	float plrDmgCrowbar;
-	float plrDmgIceaxe;
 	float plrDmg9MM;
 	float plrDmg357;
 	float plrDmgMP5;
@@ -110,6 +114,7 @@ struct skilldata_t
 	float plrDmgHandGrenade;
 	float plrDmgSatchel;
 	float plrDmgTripmine;
+	float plrDmgIceaxe;
 	
 	// weapons shared by monsters
 	float monDmg9MM;

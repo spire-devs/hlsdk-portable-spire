@@ -79,6 +79,7 @@ public:
 #define	WEAPON_SATCHEL			14
 #define	WEAPON_SNARK			15
 #define WEAPON_ICEAXE			16
+#define WEAPON_FLAREGUN			17
 
 #define WEAPON_ALLWEAPONS		(~(1<<WEAPON_SUIT))
 
@@ -102,6 +103,7 @@ public:
 #define SATCHEL_WEIGHT		-10
 #define TRIPMINE_WEIGHT		-10
 #define ICEAXE_WEIGHT		0
+#define FLAREGUN_WEIGHT		15
 
 // weapon clip/carry ammo capacities
 #define URANIUM_MAX_CARRY		100
@@ -116,6 +118,7 @@ public:
 #define SNARK_MAX_CARRY			15
 #define HORNET_MAX_CARRY		8
 #define M203_GRENADE_MAX_CARRY	10
+#define FLAREROUND_MAX_CARRY	20
 
 // the maximum amount of ammo each weapon's clip can hold
 #define WEAPON_NOCLIP			-1
@@ -134,6 +137,7 @@ public:
 #define SATCHEL_MAX_CLIP		WEAPON_NOCLIP
 #define TRIPMINE_MAX_CLIP		WEAPON_NOCLIP
 #define SNARK_MAX_CLIP			WEAPON_NOCLIP
+#define FLAREGUN_MAX_CLIP		1
 
 // the default amount of ammo that comes with each gun when it spawns
 #define GLOCK_DEFAULT_GIVE			17
@@ -150,6 +154,7 @@ public:
 #define TRIPMINE_DEFAULT_GIVE		1
 #define SNARK_DEFAULT_GIVE			5
 #define HIVEHAND_DEFAULT_GIVE		8
+#define FLAREGUN_DEFAULT_GIVE		1
 
 // The amount of ammo given to a player by an ammo item.
 #define AMMO_URANIUMBOX_GIVE	20
@@ -163,6 +168,8 @@ public:
 #define AMMO_RPGCLIP_GIVE		RPG_MAX_CLIP
 #define AMMO_URANIUMBOX_GIVE	20
 #define AMMO_SNARKBOX_GIVE		5
+#define AMMO_FLAREROUND			1
+#define AMMO_FLAREBOX			5
 
 // bullet types
 typedef	enum
@@ -518,39 +525,6 @@ public:
 	}
 private:
 	unsigned short m_usCrowbar;
-};
-
-class CIceaxe : public CBasePlayerWeapon
-{
-public:
-	void Spawn( void );
-	void Precache( void );
-	int iItemSlot( void ) { return 1; }
-	void EXPORT SwingAgain( void );
-	void EXPORT Smack( void );
-	int GetItemInfo( ItemInfo *p );
-	int AddToPlayer( CBasePlayer *pPlayer );
-
-	void PrimaryAttack( void );
-	int Swing( int fFirst );
-	BOOL Deploy( void );
-	void Holster( int skiplocal = 0 );
-#if CROWBAR_IDLE_ANIM
-	void WeaponIdle();
-#endif
-	int m_iSwing;
-	TraceResult m_trHit;
-
-	virtual BOOL UseDecrement( void )
-	{ 
-#if CLIENT_WEAPONS
-		return TRUE;
-#else
-		return FALSE;
-#endif
-	}
-private:
-	unsigned short m_usIceaxe;
 };
 
 class CPython : public CBasePlayerWeapon
@@ -1031,5 +1005,35 @@ public:
 
 private:
 	unsigned short m_usSnarkFire;
+};
+
+class CIceaxe : public CBasePlayerWeapon
+{
+public:
+	void Spawn( void );
+	void Precache( void );
+	int iItemSlot( void ) { return 1; }
+	void EXPORT SwingAgain( void );
+	void EXPORT Smack( void );
+	int GetItemInfo( ItemInfo *p );
+	int AddToPlayer( CBasePlayer *pPlayer );
+
+	void PrimaryAttack( void );
+	int Swing( int fFirst );
+	BOOL Deploy( void );
+	void Holster( int skiplocal = 0 );
+	int m_iSwing;
+	TraceResult m_trHit;
+
+	virtual BOOL UseDecrement( void )
+	{ 
+#if CLIENT_WEAPONS
+		return TRUE;
+#else
+		return FALSE;
+#endif
+	}
+private:
+	unsigned short m_usIceaxe;
 };
 #endif // WEAPONS_H
