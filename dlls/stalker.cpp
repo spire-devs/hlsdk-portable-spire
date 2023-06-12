@@ -47,6 +47,7 @@ public:
 	int IgnoreConditions( void );
 	void PrescheduleThink( void );
 
+	void DeathSound( void );
 	void PainSound( void );
 	void AlertSound( void );
 	void IdleSound( void );
@@ -56,6 +57,7 @@ public:
 	static const char *pIdleSounds[];
 	static const char *pAlertSounds[];
 	static const char *pPainSounds[];
+	static const char *pDeathSounds[];
 	static const char *pAttackHitSounds[];
 	static const char *pAttackMissSounds[];
 
@@ -99,7 +101,6 @@ const char *CStalker::pIdleSounds[] =
 	"stalker/breathing1.wav",
 	"stalker/breathing2.wav",
 	"stalker/breathing3.wav",
-	"stalker/breathing3.wav",
 };
 
 const char *CStalker::pAlertSounds[] =
@@ -119,6 +120,13 @@ const char *CStalker::pPainSounds[] =
 	"stalker/pain2.wav",
 	"stalker/pain3.wav",
 	"stalker/pain4.wav",
+};
+
+const char *CStalker::pDeathSounds[] =
+{
+	"stalker/die1.wav",
+	"stalker/die2.wav",
+	"stalker/die3.wav",
 };
 
 //=========================================================
@@ -199,6 +207,14 @@ void CStalker::AttackSound( void )
 	EMIT_SOUND_DYN( ENT( pev ), CHAN_VOICE, RANDOM_SOUND_ARRAY( pAttackSounds ), 1.0, ATTN_NORM, 0, pitch );
 }
 
+void CStalker::DeathSound( void )
+{
+	int pitch = 95 + RANDOM_LONG( 0, 9 );
+	
+	// Play a random death sound
+	EMIT_SOUND_DYN( ENT( pev ), CHAN_VOICE, RANDOM_SOUND_ARRAY( pDeathSounds ), 1.0, ATTN_NORM, 0, pitch );
+}
+
 //=========================================================
 // HandleAnimEvent - catches the monster-specific messages
 // that occur when tagged animation frames are played.
@@ -268,6 +284,7 @@ void CStalker::Precache()
 	PRECACHE_SOUND_ARRAY( pIdleSounds );
 	PRECACHE_SOUND_ARRAY( pAlertSounds );
 	PRECACHE_SOUND_ARRAY( pPainSounds );
+	PRECACHE_SOUND_ARRAY( pDeathSounds );
 }
 
 //=========================================================
