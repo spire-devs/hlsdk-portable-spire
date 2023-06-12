@@ -51,7 +51,7 @@ extern DLL_GLOBAL ULONG		g_ulFrameCount;
 extern void CopyToBodyQue( entvars_t* pev );
 extern int giPrecacheGrunt;
 extern int gmsgSayText;
-extern int gmsgBhopcap;
+//extern int gmsgBhopcap;
 extern int gmsgHUDColor;
 extern cvar_t allow_spectators;
 extern cvar_t multibyte_only;
@@ -854,14 +854,14 @@ void StartFrame( void )
 
 	//	CheckDesiredList(); //LRC
 	CheckAssistList(); //LRC
-	int oldBhopcap = g_bhopcap;
+	/*int oldBhopcap = g_bhopcap;
 	g_bhopcap = ( g_pGameRules && g_pGameRules->IsMultiplayer() && bhopcap.value != 0.0f ) ? 1 : 0;
 	if( g_bhopcap != oldBhopcap )
 	{
 		MESSAGE_BEGIN( MSG_ALL, gmsgBhopcap, NULL );
 			WRITE_BYTE( g_bhopcap );
 		MESSAGE_END();
-	}
+	}*/
 }
 
 void ClientPrecache( void )
