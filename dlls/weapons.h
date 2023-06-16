@@ -118,7 +118,7 @@ public:
 #define SNARK_MAX_CARRY			15
 #define HORNET_MAX_CARRY		8
 #define M203_GRENADE_MAX_CARRY	10
-#define FLAREROUND_MAX_CARRY	20
+#define FLAREGUN_MAX_CARRY		20
 
 // the maximum amount of ammo each weapon's clip can hold
 #define WEAPON_NOCLIP			-1
@@ -168,8 +168,8 @@ public:
 #define AMMO_RPGCLIP_GIVE		RPG_MAX_CLIP
 #define AMMO_URANIUMBOX_GIVE	20
 #define AMMO_SNARKBOX_GIVE		5
-#define AMMO_FLAREROUND			1
-#define AMMO_FLAREBOX			5
+#define AMMO_FLARE_GIVE			FLAREGUN_MAX_CLIP
+#define AMMO_FLAREBOX_GIVE		5
 
 // bullet types
 typedef	enum
@@ -1041,5 +1041,34 @@ public:
 	}
 private:
 	unsigned short m_usIceaxe;
+};
+
+class CFlaregun : public CBasePlayerWeapon
+{
+public:
+	void Spawn( void );
+	void Precache( void );
+	int iItemSlot( void ) { return 2; }
+	int GetItemInfo( ItemInfo *p );
+	int AddToPlayer( CBasePlayer *pPlayer );
+
+	void PrimaryAttack( void );
+	BOOL Deploy( void );
+	void Reload( void );
+	void WeaponIdle( void );
+
+	virtual BOOL UseDecrement( void )
+	{ 
+#if CLIENT_WEAPONS
+		return TRUE;
+#else
+		return FALSE;
+#endif
+	}
+
+private:
+	int m_iShell;
+
+	unsigned short m_usFireFlaregun;
 };
 #endif // WEAPONS_H

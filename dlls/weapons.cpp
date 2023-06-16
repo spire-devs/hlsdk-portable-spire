@@ -355,6 +355,11 @@ void W_Precache( void )
 	
 	// Iceaxe
 	UTIL_PrecacheOtherWeapon( "weapon_iceaxe" );
+	
+	// Flaregun
+	UTIL_PrecacheOtherWeapon( "weapon_flaregun" );
+	UTIL_PrecacheOther( "ammo_flare" );
+	UTIL_PrecacheOther( "ammo_flarebox" );
 
 	if( g_pGameRules->IsDeathmatch() )
 	{

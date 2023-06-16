@@ -182,6 +182,9 @@ void CHalfLifeMultiplay::RefreshSkillData( void )
 	
 	// Iceaxe thwang
 	gSkillData.plrDmgIceaxe = 15;
+	
+	// Flaregun
+	gSkillData.plrDmgFlaregunClient = 50;
 
 	// hornet
 	gSkillData.plrDmgHornet = 10;

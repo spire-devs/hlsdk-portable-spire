@@ -69,6 +69,7 @@ void EV_HornetGunFire( struct event_args_s *args );
 void EV_TripmineFire( struct event_args_s *args );
 void EV_SnarkFire( struct event_args_s *args );
 void EV_Iceaxe( struct event_args_s *args );
+void EV_FireFlaregun( struct event_args_s *args );
 
 void EV_TrainPitchAdjust( struct event_args_s *args );
 }
@@ -1749,6 +1750,122 @@ void EV_Iceaxe( event_args_t *args )
 }
 //======================
 //	   ICEAXE END 
+//======================
+
+//======================
+//	  FLAREGUN START
+//======================
+enum flaregun_e
+{
+	FLAREGUN_IDLE1 = 0,
+	FLAREGUN_DRAW,
+	FLAREGUN_DRYFIRE,
+	FLAREGUN_SHOOT,
+	FLAREGUN_RELOAD,
+	FLAREGUN_HOLSTER
+};
+
+//=====================
+// EV_FlareCallback
+// This function is used to correct the origin and angles 
+// of the bolt, so it looks like it's stuck on the wall.
+//=====================
+void EV_FlareCallback( struct tempent_s *ent, float frametime, float currenttime )
+{
+	ent->entity.origin = ent->entity.baseline.vuser1;
+	ent->entity.angles = ent->entity.baseline.vuser2;
+}
+
+void EV_FireFlaregun( event_args_t *args )
+{
+	vec3_t vecSrc, vecEnd;
+	vec3_t up, right, forward;
+	pmtrace_t tr;
+	int empty;
+
+	int idx;
+	vec3_t origin;
+	vec3_t angles;
+	vec3_t velocity;
+
+	idx = args->entindex;
+	VectorCopy( args->origin, origin );
+	VectorCopy( args->angles, angles );
+
+	VectorCopy( args->velocity, velocity );
+
+	AngleVectors( angles, forward, right, up );
+
+	EV_GetGunPosition( args, vecSrc, origin );
+
+	VectorMA( vecSrc, 8192, forward, vecEnd );
+	
+	gEngfuncs.pEventAPI->EV_PlaySound( idx, origin, CHAN_WEAPON, "weapons/flaregun1.wav", 1, ATTN_NORM, 0, 94 + gEngfuncs.pfnRandomLong( 0, 0xf ) );
+
+	empty = args->bparam1;
+	
+	if( EV_IsLocal( idx ) )
+	{
+		gEngfuncs.pEventAPI->EV_WeaponAnimation( empty ? FLAREGUN_DRYFIRE : FLAREGUN_SHOOT, 0 );
+	}
+
+	// Store off the old count
+	gEngfuncs.pEventAPI->EV_PushPMStates();
+
+	// Now add in all of the players.
+	gEngfuncs.pEventAPI->EV_SetSolidPlayers ( idx - 1 );	
+	gEngfuncs.pEventAPI->EV_SetTraceHull( 2 );
+	gEngfuncs.pEventAPI->EV_PlayerTrace( vecSrc, vecEnd, PM_STUDIO_BOX, -1, &tr );
+
+	//We hit something
+	if( tr.fraction < 1.0f )
+	{
+		physent_t *pe = gEngfuncs.pEventAPI->EV_GetPhysent( tr.ent ); 
+
+		//Not the world, let's assume we hit something organic ( dog, cat, uncle joe, etc ).
+		if( pe->solid != SOLID_BSP )
+		{
+			switch( gEngfuncs.pfnRandomLong( 0, 1 ) )
+			{
+			case 0:
+				gEngfuncs.pEventAPI->EV_PlaySound( idx, tr.endpos, CHAN_BODY, "weapons/xbow_hitbod1.wav", 1, ATTN_NORM, 0, PITCH_NORM );
+				break;
+			case 1:
+				gEngfuncs.pEventAPI->EV_PlaySound( idx, tr.endpos, CHAN_BODY, "weapons/xbow_hitbod2.wav", 1, ATTN_NORM, 0, PITCH_NORM );
+				break;
+			}
+		}
+		//Stick to world but don't stick to glass, it might break and leave the bolt floating. It can still stick to other non-transparent breakables though.
+		else if( pe->rendermode == kRenderNormal ) 
+		{
+			gEngfuncs.pEventAPI->EV_PlaySound( 0, tr.endpos, CHAN_BODY, "weapons/xbow_hit1.wav", gEngfuncs.pfnRandomFloat( 0.95f, 1.0f ), ATTN_NORM, 0, PITCH_NORM );
+
+			//Not underwater, do some sparks...
+			if( gEngfuncs.PM_PointContents( tr.endpos, NULL ) != CONTENTS_WATER )
+				 gEngfuncs.pEfxAPI->R_SparkShower( tr.endpos );
+
+			vec3_t vFlareAngles;
+			int iModelIndex = gEngfuncs.pEventAPI->EV_FindModelIndex( "models/w_flare.mdl" );
+
+			VectorAngles( forward, vFlareAngles );
+
+			TEMPENTITY *flare = gEngfuncs.pEfxAPI->R_TempModel( tr.endpos - forward * 10, Vector( 0, 0, 0 ), vFlareAngles , 5, iModelIndex, TE_BOUNCE_NULL );
+
+			if( flare )
+			{
+				flare->flags |= ( FTENT_CLIENTCUSTOM ); //So it calls the callback function.
+				flare->entity.baseline.vuser1 = tr.endpos - forward * 2; // Pull out a little bit
+				flare->entity.baseline.vuser2 = vFlareAngles; //Look forward!
+				flare->callback = EV_FlareCallback; //So we can set the angles and origin back. (Stick the bolt to the wall)
+			}
+		}
+	}
+
+	gEngfuncs.pEventAPI->EV_PopPMStates();
+}
+
+//======================
+//	   FLAREGUN END 
 //======================
 
 void EV_TrainPitchAdjust( event_args_t *args )

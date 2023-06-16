@@ -114,7 +114,7 @@ void CIceaxe::PrimaryAttack()
 	{
 #if !CLIENT_DLL
 		SetThink( &CIceaxe::SwingAgain );
-		pev->nextthink = gpGlobals->time + 0.05f;
+		SetNextThink( 0.1f );
 #endif
 	}
 }
@@ -214,19 +214,19 @@ int CIceaxe::Swing( int fFirst )
 #endif
 			{
 				// first swing does full damage
-				pEntity->TraceAttack( m_pPlayer->pev, gSkillData.plrDmgIceaxe, gpGlobals->v_forward, &tr, DMG_CLUB ); 
+				pEntity->TraceAttack( m_pPlayer->pev, gSkillData.plrDmgIceaxe, gpGlobals->v_forward, &tr, DMG_CLUB );
 			}
 			else
 			{
 				// subsequent swings do half
-				pEntity->TraceAttack( m_pPlayer->pev, gSkillData.plrDmgIceaxe * 0.5f, gpGlobals->v_forward, &tr, DMG_CLUB ); 
+				pEntity->TraceAttack( m_pPlayer->pev, gSkillData.plrDmgIceaxe / 2, gpGlobals->v_forward, &tr, DMG_CLUB );
 			}
 			ApplyMultiDamage( m_pPlayer->pev, m_pPlayer->pev );
 
 			if( pEntity->Classify() != CLASS_NONE && pEntity->Classify() != CLASS_MACHINE )
 			{
 				// play thwack or smack sound
-				switch( RANDOM_LONG( 0, 1 ) )
+				switch( RANDOM_LONG( 0, 2 ) )
 				{
 				case 0:
 					EMIT_SOUND( ENT( m_pPlayer->pev ), CHAN_ITEM, "weapons/iceaxe_impact1.wav", 1.0f, ATTN_NORM );
@@ -234,13 +234,18 @@ int CIceaxe::Swing( int fFirst )
 				case 1:
 					EMIT_SOUND( ENT( m_pPlayer->pev ), CHAN_ITEM, "weapons/iceaxe_impact2.wav", 1.0f, ATTN_NORM );
 					break;
+				case 2:
+					EMIT_SOUND( ENT( m_pPlayer->pev ), CHAN_ITEM, "weapons/iceaxe_impact1.wav", 1.0f, ATTN_NORM );
+					break;
 				}
 
 				m_pPlayer->m_iWeaponVolume = ICEAXE_BODYHIT_VOLUME;
 
 				if( !pEntity->IsAlive() )
 				{
+#if CROWBAR_FIX_RAPID_CROWBAR
 					m_flNextPrimaryAttack = GetNextAttackDelay(0.25);
+#endif
 					return TRUE;
 				}
 				else
@@ -259,17 +264,17 @@ int CIceaxe::Swing( int fFirst )
 
 			if( g_pGameRules->IsMultiplayer() )
 			{
-				// override the volume here, cause we don't play texture sounds in multiplayer, 
+				// override the volume here, cause we don't play texture sounds in multiplayer,
 				// and fvolbar is going to be 0 from the above call.
 
 				fvolbar = 1.0f;
 			}
 
-			// also play crowbar strike
+			// also play iceaxe strike
 			switch( RANDOM_LONG( 0, 1 ) )
 			{
 			case 0:
-				EMIT_SOUND_DYN( ENT( m_pPlayer->pev ), CHAN_ITEM, "weapons/iceaxe_impact1.wav", fvolbar, ATTN_NORM, 0, 98 + RANDOM_LONG( 0, 3 ) ); 
+				EMIT_SOUND_DYN( ENT( m_pPlayer->pev ), CHAN_ITEM, "weapons/iceaxe_impact1.wav", fvolbar, ATTN_NORM, 0, 98 + RANDOM_LONG( 0, 3 ) );
 				break;
 			case 1:
 				EMIT_SOUND_DYN( ENT( m_pPlayer->pev ), CHAN_ITEM, "weapons/iceaxe_impact2.wav", fvolbar, ATTN_NORM, 0, 98 + RANDOM_LONG( 0, 3 ) );
@@ -283,9 +288,13 @@ int CIceaxe::Swing( int fFirst )
 		m_pPlayer->m_iWeaponVolume = (int)( flVol * ICEAXE_WALLHIT_VOLUME );
 
 		SetThink( &CIceaxe::Smack );
-		pev->nextthink = gpGlobals->time + 0.1f;
+		SetNextThink( 0.2f );
 #endif
-		m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.125f;
+#if CROWBAR_DELAY_FIX
+		m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.25f;
+#else
+		m_flNextPrimaryAttack = GetNextAttackDelay( 0.25f );
+#endif
 	}
 	return fDidHit;
 }

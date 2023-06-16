@@ -37,28 +37,32 @@ extern DLL_GLOBAL Vector	g_vecAttackDir;
 // be spawned, and still remain fairly flexible
 const char *CBreakable::pSpawnObjects[] =
 {
-	NULL,			// 0
-	"item_battery",		// 1
-	"item_healthkit",	// 2
+	NULL,					// 0
+	"item_battery",			// 1
+	"item_healthkit",		// 2
 	"weapon_9mmhandgun",	// 3
-	"ammo_9mmclip",		// 4
-	"weapon_9mmAR",		// 5
-	"ammo_9mmAR",		// 6
-	"ammo_ARgrenades",	// 7
-	"weapon_shotgun",	// 8
-	"ammo_buckshot",	// 9
-	"weapon_crossbow",	// 10
-	"ammo_crossbow",	// 11
-	"weapon_357",		// 12
-	"ammo_357",		// 13
-	"weapon_rpg",		// 14
-	"ammo_rpgclip",		// 15
-	"ammo_gaussclip",	// 16
+	"ammo_9mmclip",			// 4
+	"weapon_9mmAR",			// 5
+	"ammo_9mmAR",			// 6
+	"ammo_ARgrenades",		// 7
+	"weapon_shotgun",		// 8
+	"ammo_buckshot",		// 9
+	"weapon_crossbow",		// 10
+	"ammo_crossbow",		// 11
+	"weapon_357",			// 12
+	"ammo_357",				// 13
+	"weapon_rpg",			// 14
+	"ammo_rpgclip",			// 15
+	"ammo_gaussclip",		// 16
 	"weapon_handgrenade",	// 17
-	"weapon_tripmine",	// 18
-	"weapon_satchel",	// 19
-	"weapon_snark",		// 20
-	"weapon_hornetgun",	// 21
+	"weapon_tripmine",		// 18
+	"weapon_satchel",		// 19
+	"weapon_snark",			// 20
+	"weapon_hornetgun",		// 21
+	"weapon_iceaxe",		// 22
+	"weapon_flaregun",		// 23
+	"ammo_flare",			// 24
+	"ammo_flarebox",		// 25
 };
 
 void CBreakable::KeyValue( KeyValueData* pkvd )

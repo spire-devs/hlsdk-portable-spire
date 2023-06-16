@@ -379,6 +379,15 @@ cvar_t	sk_plr_iceaxe1 = {"sk_plr_iceaxe1","0"};
 cvar_t	sk_plr_iceaxe2 = {"sk_plr_iceaxe2","0"};
 cvar_t	sk_plr_iceaxe3 = {"sk_plr_iceaxe3","0"};
 
+// Flaregun
+cvar_t	sk_plr_flaregun_client1 = {"sk_plr_flaregun_client1","0"};
+cvar_t	sk_plr_flaregun_client2 = {"sk_plr_flaregun_client2","0"};
+cvar_t	sk_plr_flaregun_client3 = {"sk_plr_flaregun_client3","0"};
+
+cvar_t	sk_plr_flaregun_monster1 = {"sk_plr_flaregun_monster1","0"};
+cvar_t	sk_plr_flaregun_monster2 = {"sk_plr_flaregun_monster2","0"};
+cvar_t	sk_plr_flaregun_monster3 = {"sk_plr_flaregun_monster3","0"};
+
 
 // WORLD WEAPONS
 cvar_t	sk_12mm_bullet1 = {"sk_12mm_bullet1","0"};
@@ -815,6 +824,15 @@ void GameDLLInit( void )
 	CVAR_REGISTER( &sk_plr_iceaxe1 );// {"sk_plr_iceaxe1","0"};
 	CVAR_REGISTER( &sk_plr_iceaxe2 );// {"sk_plr_iceaxe2","0"};
 	CVAR_REGISTER( &sk_plr_iceaxe3 );// {"sk_plr_iceaxe3","0"};
+	
+	// Flaregun
+	CVAR_REGISTER( &sk_plr_flaregun_monster1 );// {"sk_plr_flaregun_monster1","0"};
+	CVAR_REGISTER( &sk_plr_flaregun_monster2 );// {"sk_plr_flaregun_monster2","0"};
+	CVAR_REGISTER( &sk_plr_flaregun_monster3 );// {"sk_plr_flaregun_monster3","0"};
+
+	CVAR_REGISTER( &sk_plr_flaregun_client1 );// {"sk_plr_flaregun_client1","0"};
+	CVAR_REGISTER( &sk_plr_flaregun_client2 );// {"sk_plr_flaregun_client2","0"};
+	CVAR_REGISTER( &sk_plr_flaregun_client3 );// {"sk_plr_flaregun_client3","0"};
 
 	// WORLD WEAPONS
 	CVAR_REGISTER( &sk_12mm_bullet1 );// {"sk_12mm_bullet1","0"};

@@ -273,6 +273,10 @@ void CGameRules::RefreshSkillData ( void )
 	
 	// Iceaxe thwang
 	gSkillData.plrDmgIceaxe = GetSkillCvar( "sk_plr_iceaxe" );
+	
+	// Flaregun
+	gSkillData.plrDmgFlaregunClient = GetSkillCvar( "sk_plr_flaregun_client" );
+	gSkillData.plrDmgFlaregunMonster = GetSkillCvar( "sk_plr_flaregun_monster" );
 
 	// MONSTER WEAPONS
 	gSkillData.monDmg12MM = GetSkillCvar( "sk_12mm_bullet" );
