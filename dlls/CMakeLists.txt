@@ -61,6 +61,7 @@ set (SVDLL_SOURCES
 	effects.cpp
 	egon.cpp
 	explode.cpp
+	flaregun.cpp
 	flyingmonster.cpp
 	func_break.cpp
 	func_tank.cpp
@@ -86,6 +87,7 @@ set (SVDLL_SOURCES
 	hornet.cpp
 	hornetgun.cpp
 	houndeye.cpp
+	iceaxe.cpp
 	ichthyosaur.cpp
 	islave_deamon.cpp
 	items.cpp
