@@ -256,10 +256,12 @@ void CFlareShot::ExplodeThink( void )
 enum flaregun_e
 {
 	FLAREGUN_IDLE1 = 0,
-	FLAREGUN_DRAW,
-	FLAREGUN_DRYFIRE,
+	FLAREGUN_IDLE2,
+	FLAREGUN_FIDGET,
 	FLAREGUN_SHOOT,
+	FLAREGUN_DRYFIRE,
 	FLAREGUN_RELOAD,
+	FLAREGUN_DRAW,
 	FLAREGUN_HOLSTER
 };
 
@@ -327,6 +329,15 @@ BOOL CFlaregun::Deploy()
 {
 	// pev->body = 1;
 	return DefaultDeploy( "models/v_flaregun.mdl", "models/p_357.mdl", FLAREGUN_DRAW, "python", /*UseDecrement() ? 1 : 0*/ 0 );
+}
+
+void CFlaregun::Holster( int skiplocal )
+{
+	m_fInReload = FALSE;
+
+	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 1.0f;
+	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + UTIL_SharedRandomFloat( m_pPlayer->random_seed, 10.0f, 15.0f );
+	SendWeaponAnim( FLAREGUN_HOLSTER );
 }
 
 void CFlaregun::PrimaryAttack( void )
@@ -419,30 +430,25 @@ void CFlaregun::WeaponIdle( void )
 
 	if( m_flTimeWeaponIdle > UTIL_WeaponTimeBase() )
 		return;
-
-	// only idle if the slid isn't back
-	if( m_iClip != 0 )
+	
+	int iAnim;
+	float flRand = UTIL_SharedRandomFloat( m_pPlayer->random_seed, 0.0f, 1.0f );
+	if( flRand <= 0.5f )
 	{
-		int iAnim;
-		float flRand = UTIL_SharedRandomFloat( m_pPlayer->random_seed, 0.0, 1.0 );
-
-		if( flRand <= 0.3f + 0 * 0.75f )
-		{
-			iAnim = FLAREGUN_IDLE1;
-			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 49.0f / 16.0f;
-		}
-		else if( flRand <= 0.6f + 0 * 0.875f )
-		{
-			iAnim = FLAREGUN_IDLE1;
-			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 60.0f / 16.0f;
-		}
-		else
-		{
-			iAnim = FLAREGUN_IDLE1;
-			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 40.0f / 16.0f;
-		}
-		SendWeaponAnim( iAnim, 1 );
+		iAnim = FLAREGUN_IDLE1;
+		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 100.0f / 30.0f;
 	}
+	else if( flRand <= 0.7f )
+	{
+		iAnim = FLAREGUN_IDLE2;
+		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 100.0f / 30.0f;
+	}
+	else
+	{
+		iAnim = FLAREGUN_FIDGET;
+		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 100.0f / 30.0f;
+	}
+	SendWeaponAnim( iAnim, 1 );
 }
 
 class CFlaregunAmmo : public CBasePlayerAmmo
