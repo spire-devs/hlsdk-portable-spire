@@ -13,18 +13,24 @@
 *
 ****/
 
-#include "extdll.h"
-#include "util.h"
-#include "cbase.h"
-#include "monsters.h"
-#include "weapons.h"
-#include "nodes.h"
-#include "player.h"
-#include "gamerules.h"
+#include 	"extdll.h"
+#include 	"util.h"
+#include 	"cbase.h"
+#include 	"monsters.h"
+#include 	"weapons.h"
+#include 	"nodes.h"
+#include	"effects.h"
+#include	"decals.h"
+#include	"soundent.h"
+#include 	"player.h"
+#include 	"gamerules.h"
+#include	"game.h"
+
+#define FLARE_AIR_VELOCITY		2000
+#define FLARE_WATER_VELOCITY	1000
+#define FLARE_SOUND_BURN		"weapons/flaregun_burn.wav"
 
 #if !CLIENT_DLL
-#define FLARE_AIR_VELOCITY	2000
-#define FLARE_WATER_VELOCITY	1000
 
 extern BOOL g_fIsXash3D;
 
@@ -41,8 +47,10 @@ class CFlareShot : public CBaseEntity
 	void EXPORT BubbleThink( void );
 	void EXPORT FlareTouch( CBaseEntity *pOther );
 	void EXPORT ExplodeThink( void );
+	void EXPORT BurnThink( void );
 
 	int m_iTrail;
+	int m_iBurnCount;
 
 public:
 	static CFlareShot *FlareCreate( void );
@@ -66,7 +74,7 @@ void CFlareShot::Spawn()
 	pev->movetype = MOVETYPE_BOUNCE;
 	pev->solid = SOLID_BBOX;
 
-	pev->gravity = 1.5f;
+	pev->gravity = 1.0f;
 
 	SET_MODEL( ENT( pev ), "models/w_flare.mdl" );
 
@@ -76,6 +84,8 @@ void CFlareShot::Spawn()
 	SetTouch( &CFlareShot::FlareTouch );
 	SetThink( &CFlareShot::BubbleThink );
 	
+	m_iBurnCount = 0;
+	
 	// Flare trail
 	MESSAGE_BEGIN( MSG_BROADCAST, SVC_TEMPENTITY );
 		WRITE_BYTE( TE_BEAMFOLLOW );
@@ -84,22 +94,27 @@ void CFlareShot::Spawn()
 		WRITE_BYTE( 40 ); // life
 		WRITE_BYTE( 5 );  // width
 		WRITE_BYTE( 255 );   // r, g, b
-		WRITE_BYTE( 64 );   // r, g, b
+		WRITE_BYTE( 32 );   // r, g, b
 		WRITE_BYTE( 0 );   // r, g, b
 		WRITE_BYTE( 255 );	// brightness
 	MESSAGE_END();  // move PHS/PVS data sending into here (SEND_ALL, SEND_PVS, SEND_PHS)
 	
-	SetNextThink( 0.2f );
+	SetNextThink( 0.1f );
 }
+
+int iFlareSparkSprite;
+
+TraceResult tr;
 
 void CFlareShot::Precache()
 {
 	PRECACHE_MODEL( "models/w_flare.mdl" );
 	PRECACHE_SOUND( "weapons/xbow_hitbod1.wav" );
 	PRECACHE_SOUND( "weapons/xbow_hitbod2.wav" );
-	PRECACHE_SOUND( "weapons/xbow_fly1.wav" );
-	PRECACHE_SOUND( "weapons/xbow_hit1.wav" );
-	PRECACHE_SOUND( "fvox/beep.wav" );
+	PRECACHE_SOUND( "weapons/flaregun_impact.wav" );
+	PRECACHE_SOUND( FLARE_SOUND_BURN );
+	
+	iFlareSparkSprite = PRECACHE_MODEL( "sprites/gargeye1.spr" );// client side spittle.
 	m_iTrail = PRECACHE_MODEL( "sprites/smoke.spr" );
 }
 
@@ -110,6 +125,7 @@ int CFlareShot::Classify( void )
 
 void CFlareShot::FlareTouch( CBaseEntity *pOther )
 {
+	
 	SetTouch( NULL );
 	SetThink( NULL );
 	
@@ -127,11 +143,11 @@ void CFlareShot::FlareTouch( CBaseEntity *pOther )
 
 		if( pOther->IsPlayer() )
 		{
-			pOther->TraceAttack( pevOwner, gSkillData.plrDmgFlaregunClient, pev->velocity.Normalize(), &tr, DMG_ALWAYSGIB ); 
+			pOther->TraceAttack( pevOwner, gSkillData.plrDmgFlaregunClient, pev->velocity.Normalize(), &tr, DMG_BLAST | DMG_ALWAYSGIB ); 
 		}
 		else
 		{
-			pOther->TraceAttack( pevOwner, gSkillData.plrDmgFlaregunMonster, pev->velocity.Normalize(), &tr, DMG_BULLET | DMG_ALWAYSGIB ); 
+			pOther->TraceAttack( pevOwner, gSkillData.plrDmgFlaregunMonster, pev->velocity.Normalize(), &tr, DMG_BLAST | DMG_ALWAYSGIB ); 
 		}
 
 		ApplyMultiDamage( pev, pevOwner );
@@ -152,9 +168,9 @@ void CFlareShot::FlareTouch( CBaseEntity *pOther )
 	}
 	else
 	{
-		EMIT_SOUND_DYN( ENT( pev ), CHAN_BODY, "weapons/xbow_hit1.wav", RANDOM_FLOAT( 0.95f, 1.0f ), ATTN_NORM, 0, 98 + RANDOM_LONG( 0, 7 ) );
+		EMIT_SOUND_DYN( ENT( pev ), CHAN_BODY, "weapons/flaregun_impact.wav", RANDOM_FLOAT( 0.95f, 1.0f ), ATTN_NORM, 0, 98 + RANDOM_LONG( 0, 7 ) );
 
-		SetThink(&CFlareShot:: SUB_Remove );
+		SetThink( &CFlareShot::BurnThink );
 		SetNextThink( 0 );// this will get changed below if the bolt is allowed to stick in what it hit.
 
 		if( FClassnameIs( pOther->pev, "worldspawn" ) )
@@ -168,7 +184,7 @@ void CFlareShot::FlareTouch( CBaseEntity *pOther )
 			pev->velocity = Vector( 0, 0, 0 );
 			pev->avelocity.z = 0;
 			pev->angles.z = RANDOM_LONG( 0, 360 );
-			SetNextThink( 10.0f );
+			SetNextThink( 0.01f );
 		}
 		else if( pOther->pev->movetype == MOVETYPE_PUSH || pOther->pev->movetype == MOVETYPE_PUSHSTEP )
 		{
@@ -179,7 +195,25 @@ void CFlareShot::FlareTouch( CBaseEntity *pOther )
 			pev->velocity = Vector( 0, 0, 0 );
 			pev->avelocity.z = 0;
 			pev->angles.z = RANDOM_LONG( 0, 360 );
-			SetNextThink( 10.0f );
+			SetNextThink( 0.01f );
+
+			if( g_fIsXash3D )
+			{
+				// g-cont. Setup movewith feature
+				pev->movetype = MOVETYPE_COMPOUND;	// set movewith type
+				pev->aiment = ENT( pOther->pev );	// set parent
+			}
+		}
+		else
+		{
+			Vector vecDir = pev->velocity.Normalize();
+			UTIL_SetOrigin( this, pev->origin - vecDir * 2.0f );
+			pev->angles = UTIL_VecToAngles( vecDir );
+			pev->solid = SOLID_NOT;
+			pev->velocity = Vector( 0, 0, 0 );
+			pev->avelocity.z = 0;
+			pev->angles.z = RANDOM_LONG( 0, 360 );
+			SetNextThink( 0.01f );
 
 			if( g_fIsXash3D )
 			{
@@ -194,6 +228,54 @@ void CFlareShot::FlareTouch( CBaseEntity *pOther )
 			UTIL_Sparks( pev->origin );
 		}
 	}
+	
+	// make a splat on the wall
+	UTIL_TraceLine( pev->origin, pev->origin + pev->velocity * 10, dont_ignore_monsters, ENT( pev ), &tr );
+	//( &tr, DECAL_SCORCH1 + RANDOM_LONG( 0, 1 ) );
+
+	// make some flecks
+	MESSAGE_BEGIN( MSG_PVS, SVC_TEMPENTITY, tr.vecEndPos );
+		WRITE_BYTE( TE_SPRITE_SPRAY );
+		WRITE_COORD( tr.vecEndPos.x );	// pos
+		WRITE_COORD( tr.vecEndPos.y );
+		WRITE_COORD( tr.vecEndPos.z );
+		WRITE_COORD( tr.vecPlaneNormal.x );	// dir
+		WRITE_COORD( tr.vecPlaneNormal.y );
+		WRITE_COORD( tr.vecPlaneNormal.z );
+		WRITE_SHORT( iFlareSparkSprite );	// model
+		WRITE_BYTE( 8 );			// count
+		WRITE_BYTE( 30 );			// speed
+		WRITE_BYTE( 80 );			// noise ( client will divide by 100 )
+	MESSAGE_END();
+	
+	// ELight
+	MESSAGE_BEGIN( MSG_BROADCAST, SVC_TEMPENTITY );
+		WRITE_BYTE( TE_ELIGHT );
+		WRITE_SHORT( entindex() );		// entity, attachment
+		WRITE_COORD( pev->origin.x );		// origin
+		WRITE_COORD( pev->origin.y );
+		WRITE_COORD( pev->origin.z );
+		WRITE_COORD( pev->renderamt / 12 );	// radius
+		WRITE_BYTE( 255 );	// R
+		WRITE_BYTE( 32 );	// G
+		WRITE_BYTE( 0 );	// B
+		WRITE_BYTE( 180 );	// life * 10
+		WRITE_COORD( 2 ); // decay
+	MESSAGE_END();
+	
+	// DLight
+	MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, pev->origin);
+		WRITE_BYTE(TE_DLIGHT);
+		WRITE_COORD( pev->origin.x );	// pos
+		WRITE_COORD( pev->origin.y );
+		WRITE_COORD( pev->origin.z );
+		WRITE_BYTE( 20 );
+		WRITE_BYTE( 255 );	// R
+		WRITE_BYTE( 32 );	// G
+		WRITE_BYTE( 0 );	// B
+		WRITE_BYTE( 180 );
+		WRITE_BYTE( 2 );
+	MESSAGE_END();
 
 	if( g_pGameRules->IsMultiplayer() )
 	{
@@ -202,9 +284,73 @@ void CFlareShot::FlareTouch( CBaseEntity *pOther )
 	}
 }
 
+void CFlareShot::BurnThink( void )
+{
+	SetNextThink( 5.0f );
+	
+	m_iBurnCount += 1;
+	
+	int m_iBurnVol = 1.0f / m_iBurnCount;
+	int m_iBurnPit = 100 / m_iBurnCount;
+	
+	EMIT_SOUND_DYN( ENT( pev ), CHAN_ITEM, FLARE_SOUND_BURN, m_iBurnVol, ATTN_NORM, 0, m_iBurnPit );
+	
+	if ( m_iBurnCount == 3 )
+	{	
+		EMIT_SOUND_DYN( ENT( pev ), CHAN_ITEM, FLARE_SOUND_BURN, 0.8, ATTN_NORM, SND_STOP, 100 );
+		UTIL_Remove( this );
+	}
+}
+
 void CFlareShot::BubbleThink( void )
 {
-	SetNextThink( 0.1f );
+	SetNextThink( 0.025f );
+	
+	TraceResult tr;
+	
+	// make some sparks
+	MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, pev->origin);
+		WRITE_BYTE(TE_SPRITE_SPRAY);
+		WRITE_COORD( pev->origin.x );	// pos
+		WRITE_COORD( pev->origin.y );
+		WRITE_COORD( pev->origin.z );
+		WRITE_COORD( tr.vecPlaneNormal.x );	// dir
+		WRITE_COORD( tr.vecPlaneNormal.y );
+		WRITE_COORD( tr.vecPlaneNormal.z );
+		WRITE_SHORT( iFlareSparkSprite );	// model
+		WRITE_BYTE( 1 );			// count
+		WRITE_BYTE( 60 );			// speed
+		WRITE_BYTE( 80 );			// noise ( client will divide by 100 )
+	MESSAGE_END();
+	
+	// ELight
+	MESSAGE_BEGIN( MSG_BROADCAST, SVC_TEMPENTITY );
+		WRITE_BYTE( TE_ELIGHT );
+		WRITE_SHORT( entindex() );		// entity, attachment
+		WRITE_COORD( pev->origin.x );		// origin
+		WRITE_COORD( pev->origin.y );
+		WRITE_COORD( pev->origin.z );
+		WRITE_COORD( pev->renderamt / 12 );	// radius
+		WRITE_BYTE( 255 );	// R
+		WRITE_BYTE( 32 );	// G
+		WRITE_BYTE( 0 );	// B
+		WRITE_BYTE( 10 );	// life * 10
+		WRITE_COORD( 0 ); // decay
+	MESSAGE_END();
+	
+	// DLight
+	MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, pev->origin);
+		WRITE_BYTE(TE_DLIGHT);
+		WRITE_COORD( pev->origin.x );	// pos
+		WRITE_COORD( pev->origin.y );
+		WRITE_COORD( pev->origin.z );
+		WRITE_BYTE( 15 );
+		WRITE_BYTE( 255 );	// R
+		WRITE_BYTE( 32 );	// G
+		WRITE_BYTE( 0 );	// B
+		WRITE_BYTE( 10 );
+		WRITE_BYTE( 0 );
+	MESSAGE_END();
 
 	if (pev->waterlevel == 0 || pev->watertype <= CONTENT_FLYFIELD)
 		return;
@@ -218,7 +364,7 @@ void CFlareShot::ExplodeThink( void )
 	int iScale;
 
 	pev->dmg = 40;
-	iScale = 10;
+	iScale = 20;
 
 	MESSAGE_BEGIN( MSG_PVS, SVC_TEMPENTITY, pev->origin );
 		WRITE_BYTE( TE_EXPLOSION );
@@ -247,7 +393,7 @@ void CFlareShot::ExplodeThink( void )
 
 	pev->owner = NULL; // can't traceline attack owner if this is set
 
-	::RadiusDamage( pev->origin, pev, pevOwner, pev->dmg, 128, CLASS_NONE, DMG_BLAST | DMG_ALWAYSGIB );
+	::RadiusDamage( pev->origin, pev, pevOwner, pev->dmg, 256, CLASS_NONE, DMG_BLAST | DMG_ALWAYSGIB );
 
 	UTIL_Remove( this );
 }
@@ -284,14 +430,20 @@ void CFlaregun::Precache( void )
 	PRECACHE_MODEL( "models/v_flaregun.mdl" );
 	PRECACHE_MODEL( "models/w_flaregun.mdl" );
 	PRECACHE_MODEL( "models/p_357.mdl" );
+	
+	PRECACHE_MODEL( "sprites/gargeye1.spr" );
 
 	m_iShell = PRECACHE_MODEL( "models/w_flare.mdl" );// brass shell
 
 	PRECACHE_SOUND( "items/9mmclip1.wav" );
 	PRECACHE_SOUND( "items/9mmclip2.wav" );
 
-	PRECACHE_SOUND( "weapons/flaregun1.wav" );
-	PRECACHE_SOUND( "weapons/flaregunreload.wav" );
+	PRECACHE_SOUND( "weapons/flaregun_fire.wav" );
+	PRECACHE_SOUND( "weapons/flaregun_open.wav" );
+	PRECACHE_SOUND( "weapons/flaregun_reload.wav" );
+	PRECACHE_SOUND( "weapons/flaregun_close.wav" );
+	PRECACHE_SOUND( "weapons/flaregun_impact.wav" );
+	PRECACHE_SOUND( FLARE_SOUND_BURN );
 
 	m_usFireFlaregun = PRECACHE_EVENT( 1, "events/flaregun.sc" );
 }
@@ -327,8 +479,7 @@ int CFlaregun::AddToPlayer( CBasePlayer *pPlayer )
 
 BOOL CFlaregun::Deploy()
 {
-	// pev->body = 1;
-	return DefaultDeploy( "models/v_flaregun.mdl", "models/p_357.mdl", FLAREGUN_DRAW, "python", /*UseDecrement() ? 1 : 0*/ 0 );
+	return DefaultDeploy( "models/v_flaregun.mdl", "models/p_357.mdl", FLAREGUN_DRAW, "python", 0 );
 }
 
 void CFlaregun::Holster( int skiplocal )

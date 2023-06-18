@@ -1802,7 +1802,7 @@ void EV_FireFlaregun( event_args_t *args )
 
 	VectorMA( vecSrc, 8192, forward, vecEnd );
 	
-	gEngfuncs.pEventAPI->EV_PlaySound( idx, origin, CHAN_WEAPON, "weapons/flaregun1.wav", 1, ATTN_NORM, 0, 94 + gEngfuncs.pfnRandomLong( 0, 0xf ) );
+	gEngfuncs.pEventAPI->EV_PlaySound( idx, origin, CHAN_WEAPON, "weapons/flaregun_fire.wav", 1, ATTN_NORM, 0, 94 + gEngfuncs.pfnRandomLong( 0, 0xf ) );
 
 	empty = args->bparam1;
 	
@@ -1827,19 +1827,12 @@ void EV_FireFlaregun( event_args_t *args )
 		//Not the world, let's assume we hit something organic ( dog, cat, uncle joe, etc ).
 		if( pe->solid != SOLID_BSP )
 		{
-			switch( gEngfuncs.pfnRandomLong( 0, 1 ) )
-			{
-			case 0:
-				gEngfuncs.pEventAPI->EV_PlaySound( idx, tr.endpos, CHAN_BODY, "weapons/xbow_hitbod1.wav", 1, ATTN_NORM, 0, PITCH_NORM );
-				break;
-			case 1:
-				gEngfuncs.pEventAPI->EV_PlaySound( idx, tr.endpos, CHAN_BODY, "weapons/xbow_hitbod2.wav", 1, ATTN_NORM, 0, PITCH_NORM );
-				break;
-			}
+			gEngfuncs.pEventAPI->EV_PlaySound( idx, tr.endpos, CHAN_BODY, "weapons/flaregun_impact.wav", 1, ATTN_NORM, 0, PITCH_NORM );
 		}
 		//Stick to world but don't stick to glass, it might break and leave the bolt floating. It can still stick to other non-transparent breakables though.
 		else if( pe->rendermode == kRenderNormal ) 
 		{
+			/*
 			gEngfuncs.pEventAPI->EV_PlaySound( 0, tr.endpos, CHAN_BODY, "weapons/xbow_hit1.wav", gEngfuncs.pfnRandomFloat( 0.95f, 1.0f ), ATTN_NORM, 0, PITCH_NORM );
 
 			//Not underwater, do some sparks...
@@ -1850,7 +1843,7 @@ void EV_FireFlaregun( event_args_t *args )
 			int iModelIndex = gEngfuncs.pEventAPI->EV_FindModelIndex( "models/w_flare.mdl" );
 
 			VectorAngles( forward, vFlareAngles );
-
+			
 			TEMPENTITY *flare = gEngfuncs.pEfxAPI->R_TempModel( tr.endpos - forward * 10, Vector( 0, 0, 0 ), vFlareAngles , 5, iModelIndex, TE_BOUNCE_NULL );
 
 			if( flare )
@@ -1860,6 +1853,7 @@ void EV_FireFlaregun( event_args_t *args )
 				flare->entity.baseline.vuser2 = vFlareAngles; //Look forward!
 				flare->callback = EV_FlareCallback; //So we can set the angles and origin back. (Stick the bolt to the wall)
 			}
+			*/
 		}
 	}
 

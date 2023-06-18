@@ -285,6 +285,10 @@ void CStalker::Precache()
 	PRECACHE_SOUND_ARRAY( pAlertSounds );
 	PRECACHE_SOUND_ARRAY( pPainSounds );
 	PRECACHE_SOUND_ARRAY( pDeathSounds );
+	PRECACHE_SOUND( "stalker/stalker_footstep_left1.wav" );
+	PRECACHE_SOUND( "stalker/stalker_footstep_left2.wav" );
+	PRECACHE_SOUND( "stalker/stalker_footstep_right1.wav" );
+	PRECACHE_SOUND( "stalker/stalker_footstep_right2.wav" );
 }
 
 //=========================================================
