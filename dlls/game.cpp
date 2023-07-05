@@ -289,6 +289,38 @@ cvar_t	sk_sentry_health1 = {"sk_sentry_health1","0"};
 cvar_t	sk_sentry_health2 = {"sk_sentry_health2","0"};
 cvar_t	sk_sentry_health3 = {"sk_sentry_health3","0"};
 
+// HORDE
+
+// Grunt 
+cvar_t	sk_wgrunt_health1 = {"sk_wgrunt_health1","0"};
+cvar_t	sk_wgrunt_health2 = {"sk_wgrunt_health2","0"};
+cvar_t	sk_wgrunt_health3 = {"sk_wgrunt_health3","0"};
+
+cvar_t	sk_wgrunt_kick1 = {"sk_wgrunt_kick1","0"};
+cvar_t	sk_wgrunt_kick2 = {"sk_wgrunt_kick2","0"};
+cvar_t	sk_wgrunt_kick3 = {"sk_wgrunt_kick3","0"};
+
+cvar_t	sk_wgrunt_pellets1 = {"sk_wgrunt_pellets1","0"};
+cvar_t	sk_wgrunt_pellets2 = {"sk_wgrunt_pellets2","0"};
+cvar_t	sk_wgrunt_pellets3 = {"sk_wgrunt_pellets3","0"};
+
+cvar_t	sk_wgrunt_gspeed1 = {"sk_wgrunt_gspeed1","0"};
+cvar_t	sk_wgrunt_gspeed2 = {"sk_wgrunt_gspeed2","0"};
+cvar_t	sk_wgrunt_gspeed3 = {"sk_wgrunt_gspeed3","0"};
+
+// Elite
+cvar_t	sk_welite_health1 = {"sk_welite_health1","0"};
+cvar_t	sk_welite_health2 = {"sk_welite_health2","0"};
+cvar_t	sk_welite_health3 = {"sk_welite_health3","0"};
+
+cvar_t	sk_welite_dmg_ball1 = {"sk_welite_dmg_ball1","0"};
+cvar_t	sk_welite_dmg_ball2 = {"sk_welite_dmg_ball2","0"};
+cvar_t	sk_welite_dmg_ball3 = {"sk_welite_dmg_ball3","0"};
+
+cvar_t	sk_welite_dmg_punch1 = {"sk_welite_dmg_punch1","0"};
+cvar_t	sk_welite_dmg_punch2 = {"sk_welite_dmg_punch2","0"};
+cvar_t	sk_welite_dmg_punch3 = {"sk_welite_dmg_punch3","0"};
+
 // PLAYER WEAPONS
 
 // Crowbar whack
@@ -388,6 +420,19 @@ cvar_t	sk_plr_flaregun_monster1 = {"sk_plr_flaregun_monster1","0"};
 cvar_t	sk_plr_flaregun_monster2 = {"sk_plr_flaregun_monster2","0"};
 cvar_t	sk_plr_flaregun_monster3 = {"sk_plr_flaregun_monster3","0"};
 
+// Spire Round's
+cvar_t	sk_plr_small_bullet1 = {"sk_plr_small_bullet1","0"};
+cvar_t	sk_plr_small_bullet2 = {"sk_plr_small_bullet2","0"};
+cvar_t	sk_plr_small_bullet3 = {"sk_plr_small_bullet3","0"};
+
+cvar_t	sk_plr_medium_bullet1 = {"sk_plr_medium_bullet1","0"};
+cvar_t	sk_plr_medium_bullet2 = {"sk_plr_medium_bullet2","0"};
+cvar_t	sk_plr_medium_bullet3 = {"sk_plr_medium_bullet3","0"};
+
+cvar_t	sk_plr_large_bullet1 = {"sk_plr_large_bullet1","0"};
+cvar_t	sk_plr_large_bullet2 = {"sk_plr_large_bullet2","0"};
+cvar_t	sk_plr_large_bullet3 = {"sk_plr_large_bullet3","0"};
+
 
 // WORLD WEAPONS
 cvar_t	sk_12mm_bullet1 = {"sk_12mm_bullet1","0"};
@@ -402,6 +447,17 @@ cvar_t	sk_9mm_bullet1 = {"sk_9mm_bullet1","0"};
 cvar_t	sk_9mm_bullet2 = {"sk_9mm_bullet2","0"};
 cvar_t	sk_9mm_bullet3 = {"sk_9mm_bullet3","0"};
 
+cvar_t	sk_small_bullet1 = {"sk_small_bullet1","0"};
+cvar_t	sk_small_bullet2 = {"sk_small_bullet2","0"};
+cvar_t	sk_small_bullet3 = {"sk_small_bullet3","0"};
+
+cvar_t	sk_medium_bullet1 = {"sk_medium_bullet1","0"};
+cvar_t	sk_medium_bullet2 = {"sk_medium_bullet2","0"};
+cvar_t	sk_medium_bullet3 = {"sk_medium_bullet3","0"};
+
+cvar_t	sk_large_bullet1 = {"sk_large_bullet1","0"};
+cvar_t	sk_large_bullet2 = {"sk_large_bullet2","0"};
+cvar_t	sk_large_bullet3 = {"sk_large_bullet3","0"};
 
 // HORNET
 cvar_t	sk_hornet_dmg1 = {"sk_hornet_dmg1","0"};
@@ -744,6 +800,38 @@ void GameDLLInit( void )
 	CVAR_REGISTER( &sk_sentry_health2 );// {"sk_sentry_health2","0"};
 	CVAR_REGISTER( &sk_sentry_health3 );// {"sk_sentry_health3","0"};
 
+	// HORDE
+
+	// Grunt 
+	CVAR_REGISTER( &sk_wgrunt_health1 );// {"sk_wgrunt_health1","0"};
+	CVAR_REGISTER( &sk_wgrunt_health2 );// {"sk_wgrunt_health2","0"};
+	CVAR_REGISTER( &sk_wgrunt_health3 );// {"sk_wgrunt_health3","0"};
+
+	CVAR_REGISTER( &sk_wgrunt_kick1 );// {"sk_wgrunt_kick1","0"};
+	CVAR_REGISTER( &sk_wgrunt_kick2 );// {"sk_wgrunt_kick2","0"};
+	CVAR_REGISTER( &sk_wgrunt_kick3 );// {"sk_wgrunt_kick3","0"};
+
+	CVAR_REGISTER( &sk_wgrunt_pellets1 );// {"sk_wgrunt_pellets1","0"};
+	CVAR_REGISTER( &sk_wgrunt_pellets2 );// {"sk_wgrunt_pellets2","0"};
+	CVAR_REGISTER( &sk_wgrunt_pellets3 );// {"sk_wgrunt_pellets3","0"};
+
+	CVAR_REGISTER( &sk_wgrunt_gspeed1 );// {"sk_wgrunt_gspeed1","0"};
+	CVAR_REGISTER( &sk_wgrunt_gspeed2 );// {"sk_wgrunt_gspeed2","0"};
+	CVAR_REGISTER( &sk_wgrunt_gspeed3 );// {"sk_wgrunt_gspeed3","0"};
+
+	// Elite
+	CVAR_REGISTER( &sk_welite_health1 );// {"sk_welite_health1","0"};
+	CVAR_REGISTER( &sk_welite_health2 );// {"sk_welite_health2","0"};
+	CVAR_REGISTER( &sk_welite_health3 );// {"sk_welite_health3","0"};
+
+	CVAR_REGISTER( &sk_welite_dmg_ball1 );// {"sk_welite_dmg_ball1","0"};
+	CVAR_REGISTER( &sk_welite_dmg_ball2 );// {"sk_welite_dmg_ball2","0"};
+	CVAR_REGISTER( &sk_welite_dmg_ball3 );// {"sk_welite_dmg_ball3","0"};
+
+	CVAR_REGISTER( &sk_welite_dmg_punch1 );// {"sk_welite_dmg_punch1","0"};
+	CVAR_REGISTER( &sk_welite_dmg_punch2 );// {"sk_welite_dmg_punch2","0"};
+	CVAR_REGISTER( &sk_welite_dmg_punch3 );// {"sk_welite_dmg_punch3","0"};
+
 
 	// PLAYER WEAPONS
 
@@ -833,6 +921,19 @@ void GameDLLInit( void )
 	CVAR_REGISTER( &sk_plr_flaregun_client1 );// {"sk_plr_flaregun_client1","0"};
 	CVAR_REGISTER( &sk_plr_flaregun_client2 );// {"sk_plr_flaregun_client2","0"};
 	CVAR_REGISTER( &sk_plr_flaregun_client3 );// {"sk_plr_flaregun_client3","0"};
+	
+	// Spire Round's
+	CVAR_REGISTER( &sk_plr_small_bullet1 );// {"sk_plr_small_bullet1","0"};
+	CVAR_REGISTER( &sk_plr_small_bullet2 );// {"sk_plr_small_bullet2","0"};
+	CVAR_REGISTER( &sk_plr_small_bullet3 );// {"sk_plr_small_bullet3","0"};
+	
+	CVAR_REGISTER( &sk_plr_medium_bullet1 );// {"sk_plr_medium_bullet1","0"};
+	CVAR_REGISTER( &sk_plr_medium_bullet2 );// {"sk_plr_medium_bullet2","0"};
+	CVAR_REGISTER( &sk_plr_medium_bullet3 );// {"sk_plr_medium_bullet3","0"};
+	
+	CVAR_REGISTER( &sk_plr_large_bullet1 );// {"sk_plr_large_bullet1","0"};
+	CVAR_REGISTER( &sk_plr_large_bullet2 );// {"sk_plr_large_bullet2","0"};
+	CVAR_REGISTER( &sk_plr_large_bullet3 );// {"sk_plr_large_bullet3","0"};
 
 	// WORLD WEAPONS
 	CVAR_REGISTER( &sk_12mm_bullet1 );// {"sk_12mm_bullet1","0"};
@@ -846,6 +947,18 @@ void GameDLLInit( void )
 	CVAR_REGISTER( &sk_9mm_bullet1 );// {"sk_9mm_bullet1","0"};
 	CVAR_REGISTER( &sk_9mm_bullet2 );// {"sk_9mm_bullet2","0"};
 	CVAR_REGISTER( &sk_9mm_bullet3 );// {"sk_9mm_bullet3","0"};
+	
+	CVAR_REGISTER( &sk_small_bullet1 );//{"sk_small_bullet1","0"};
+	CVAR_REGISTER( &sk_small_bullet2 );// {"sk_small_bullet2","0"};
+	CVAR_REGISTER( &sk_small_bullet3 );// {"sk_small_bullet3","0"};
+
+	CVAR_REGISTER( &sk_medium_bullet1 );// {"sk_medium_bullet1","0"};
+	CVAR_REGISTER( &sk_medium_bullet2 );// {"sk_medium_bullet2","0"};
+	CVAR_REGISTER( &sk_medium_bullet3 );// {"sk_medium_bullet3","0"};
+
+	CVAR_REGISTER( &sk_large_bullet1 );// {"sk_large_bullet1","0"};
+	CVAR_REGISTER( &sk_large_bullet2 );// {"sk_large_bullet2","0"};
+	CVAR_REGISTER( &sk_large_bullet3 );// {"sk_large_bullet3","0"};
 
 	// HORNET
 	CVAR_REGISTER( &sk_hornet_dmg1 );// {"sk_hornet_dmg1","0"};

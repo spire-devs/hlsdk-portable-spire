@@ -28,7 +28,7 @@
 
 #define FLARE_AIR_VELOCITY		2000
 #define FLARE_WATER_VELOCITY	1000
-#define FLARE_SOUND_BURN		"weapons/flaregun_burn.wav"
+#define FLARE_SOUND_BURN		"weapons/flaregun/flaregun_burn.wav"
 
 #if !CLIENT_DLL
 
@@ -111,7 +111,7 @@ void CFlareShot::Precache()
 	PRECACHE_MODEL( "models/w_flare.mdl" );
 	PRECACHE_SOUND( "weapons/xbow_hitbod1.wav" );
 	PRECACHE_SOUND( "weapons/xbow_hitbod2.wav" );
-	PRECACHE_SOUND( "weapons/flaregun_impact.wav" );
+	PRECACHE_SOUND( "weapons/flaregun/flaregun_impact.wav" );
 	PRECACHE_SOUND( FLARE_SOUND_BURN );
 	
 	iFlareSparkSprite = PRECACHE_MODEL( "sprites/gargeye1.spr" );// client side spittle.
@@ -168,7 +168,7 @@ void CFlareShot::FlareTouch( CBaseEntity *pOther )
 	}
 	else
 	{
-		EMIT_SOUND_DYN( ENT( pev ), CHAN_BODY, "weapons/flaregun_impact.wav", RANDOM_FLOAT( 0.95f, 1.0f ), ATTN_NORM, 0, 98 + RANDOM_LONG( 0, 7 ) );
+		EMIT_SOUND_DYN( ENT( pev ), CHAN_BODY, "weapons/flaregun/flaregun_impact.wav", RANDOM_FLOAT( 0.95f, 1.0f ), ATTN_NORM, 0, 98 + RANDOM_LONG( 0, 7 ) );
 
 		SetThink( &CFlareShot::BurnThink );
 		SetNextThink( 0 );// this will get changed below if the bolt is allowed to stick in what it hit.
@@ -286,7 +286,24 @@ void CFlareShot::FlareTouch( CBaseEntity *pOther )
 
 void CFlareShot::BurnThink( void )
 {
-	SetNextThink( 5.0f );
+	SetNextThink( 0.625f );
+	
+	TraceResult tr;
+	
+	// make some sparks
+	MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, pev->origin);
+		WRITE_BYTE(TE_SPRITE_SPRAY);
+		WRITE_COORD( pev->origin.x );	// pos
+		WRITE_COORD( pev->origin.y );
+		WRITE_COORD( pev->origin.z );
+		WRITE_COORD( tr.vecPlaneNormal.x );	// dir
+		WRITE_COORD( tr.vecPlaneNormal.y );
+		WRITE_COORD( tr.vecPlaneNormal.z );
+		WRITE_SHORT( iFlareSparkSprite );	// model
+		WRITE_BYTE( 2 );			// count
+		WRITE_BYTE( 60 );			// speed
+		WRITE_BYTE( 80 );			// noise ( client will divide by 100 )
+	MESSAGE_END();
 	
 	m_iBurnCount += 1;
 	
@@ -295,7 +312,7 @@ void CFlareShot::BurnThink( void )
 	
 	EMIT_SOUND_DYN( ENT( pev ), CHAN_ITEM, FLARE_SOUND_BURN, m_iBurnVol, ATTN_NORM, 0, m_iBurnPit );
 	
-	if ( m_iBurnCount == 3 )
+	if ( m_iBurnCount == 24 )
 	{	
 		EMIT_SOUND_DYN( ENT( pev ), CHAN_ITEM, FLARE_SOUND_BURN, 0.8, ATTN_NORM, SND_STOP, 100 );
 		UTIL_Remove( this );
@@ -438,11 +455,11 @@ void CFlaregun::Precache( void )
 	PRECACHE_SOUND( "items/9mmclip1.wav" );
 	PRECACHE_SOUND( "items/9mmclip2.wav" );
 
-	PRECACHE_SOUND( "weapons/flaregun_fire.wav" );
-	PRECACHE_SOUND( "weapons/flaregun_open.wav" );
-	PRECACHE_SOUND( "weapons/flaregun_reload.wav" );
-	PRECACHE_SOUND( "weapons/flaregun_close.wav" );
-	PRECACHE_SOUND( "weapons/flaregun_impact.wav" );
+	PRECACHE_SOUND( "weapons/flaregun/flaregun_fire.wav" );
+	PRECACHE_SOUND( "weapons/flaregun/flaregun_open.wav" );
+	PRECACHE_SOUND( "weapons/flaregun/flaregun_reload.wav" );
+	PRECACHE_SOUND( "weapons/flaregun/flaregun_close.wav" );
+	PRECACHE_SOUND( "weapons/flaregun/flaregun_impact.wav" );
 	PRECACHE_SOUND( FLARE_SOUND_BURN );
 
 	m_usFireFlaregun = PRECACHE_EVENT( 1, "events/flaregun.sc" );

@@ -96,6 +96,15 @@ struct skilldata_t
 	float turretHealth;
 	float miniturretHealth;
 	float sentryHealth;
+	
+	float wgruntHealth;
+	float wgruntDmgKick;
+	float wgruntShotgunPellets;
+	float wgruntGrenadeSpeed;
+	
+	float weliteHealth;
+	float weliteDmgPunch;
+	float weliteDmgBall;
 
 	// Player Weapons
 	float plrDmgCrowbar;
@@ -117,11 +126,17 @@ struct skilldata_t
 	float plrDmgIceaxe;
 	float plrDmgFlaregunClient;
 	float plrDmgFlaregunMonster;
+	float plrDmgSmallRound;
+	float plrDmgMediumRound;
+	float plrDmgLargeRound;
 	
 	// weapons shared by monsters
 	float monDmg9MM;
 	float monDmgMP5;
 	float monDmg12MM;
+	float monDmgSmallRound;
+	float monDmgMediumRound;
+	float monDmgLargeRound;
 	float monDmgHornet;
 
 	// health/suit charge

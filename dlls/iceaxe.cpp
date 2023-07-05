@@ -62,10 +62,10 @@ void CIceaxe::Precache( void )
 	PRECACHE_MODEL( "models/v_iceaxe.mdl" );
 	PRECACHE_MODEL( "models/w_iceaxe.mdl" );
 	PRECACHE_MODEL( "models/p_crowbar.mdl" );
-	PRECACHE_SOUND( "weapons/iceaxe_impact1.wav" );
-	PRECACHE_SOUND( "weapons/iceaxe_impact2.wav" );
-	PRECACHE_SOUND( "weapons/iceaxe_swing1.wav" );
-	PRECACHE_SOUND( "weapons/iceaxe_swing2.wav" );
+	PRECACHE_SOUND( "weapons/iceaxe/iceaxe_impact1.wav" );
+	PRECACHE_SOUND( "weapons/iceaxe/iceaxe_impact2.wav" );
+	PRECACHE_SOUND( "weapons/iceaxe/iceaxe_swing1.wav" );
+	PRECACHE_SOUND( "weapons/iceaxe/iceaxe_swing2.wav" );
 
 	m_usIceaxe = PRECACHE_EVENT( 1, "events/iceaxe.sc" );
 }
@@ -229,13 +229,13 @@ int CIceaxe::Swing( int fFirst )
 				switch( RANDOM_LONG( 0, 2 ) )
 				{
 				case 0:
-					EMIT_SOUND( ENT( m_pPlayer->pev ), CHAN_ITEM, "weapons/iceaxe_impact1.wav", 1.0f, ATTN_NORM );
+					EMIT_SOUND( ENT( m_pPlayer->pev ), CHAN_ITEM, "weapons/iceaxe/iceaxe_impact1.wav", 1.0f, ATTN_NORM );
 					break;
 				case 1:
-					EMIT_SOUND( ENT( m_pPlayer->pev ), CHAN_ITEM, "weapons/iceaxe_impact2.wav", 1.0f, ATTN_NORM );
+					EMIT_SOUND( ENT( m_pPlayer->pev ), CHAN_ITEM, "weapons/iceaxe/iceaxe_impact2.wav", 1.0f, ATTN_NORM );
 					break;
 				case 2:
-					EMIT_SOUND( ENT( m_pPlayer->pev ), CHAN_ITEM, "weapons/iceaxe_impact1.wav", 1.0f, ATTN_NORM );
+					EMIT_SOUND( ENT( m_pPlayer->pev ), CHAN_ITEM, "weapons/iceaxe/iceaxe_impact1.wav", 1.0f, ATTN_NORM );
 					break;
 				}
 
@@ -274,10 +274,10 @@ int CIceaxe::Swing( int fFirst )
 			switch( RANDOM_LONG( 0, 1 ) )
 			{
 			case 0:
-				EMIT_SOUND_DYN( ENT( m_pPlayer->pev ), CHAN_ITEM, "weapons/iceaxe_impact1.wav", fvolbar, ATTN_NORM, 0, 98 + RANDOM_LONG( 0, 3 ) );
+				EMIT_SOUND_DYN( ENT( m_pPlayer->pev ), CHAN_ITEM, "weapons/iceaxe/iceaxe_impact1.wav", fvolbar, ATTN_NORM, 0, 98 + RANDOM_LONG( 0, 3 ) );
 				break;
 			case 1:
-				EMIT_SOUND_DYN( ENT( m_pPlayer->pev ), CHAN_ITEM, "weapons/iceaxe_impact2.wav", fvolbar, ATTN_NORM, 0, 98 + RANDOM_LONG( 0, 3 ) );
+				EMIT_SOUND_DYN( ENT( m_pPlayer->pev ), CHAN_ITEM, "weapons/iceaxe/iceaxe_impact2.wav", fvolbar, ATTN_NORM, 0, 98 + RANDOM_LONG( 0, 3 ) );
 				break;
 			}
 

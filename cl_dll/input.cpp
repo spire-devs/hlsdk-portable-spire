@@ -75,6 +75,7 @@ cvar_t	*cl_forwardspeed;
 cvar_t	*cl_backspeed;
 cvar_t	*cl_sidespeed;
 cvar_t	*cl_movespeedkey;
+cvar_t	*cl_walkspeedkey;
 cvar_t	*cl_yawspeed;
 cvar_t	*cl_pitchspeed;
 cvar_t	*cl_anglespeedkey;
@@ -114,6 +115,7 @@ kbutton_t	in_moveleft;
 kbutton_t	in_moveright;
 kbutton_t	in_strafe;
 kbutton_t	in_speed;
+kbutton_t	in_walk;
 kbutton_t	in_use;
 kbutton_t	in_jump;
 kbutton_t	in_attack;
@@ -541,6 +543,16 @@ void IN_SpeedUp( void )
 	KeyUp( &in_speed );
 }
 
+void IN_WalkDown( void )
+{
+	KeyDown( &in_walk );
+}
+
+void IN_WalkUp( void )
+{
+	KeyUp( &in_walk );
+}
+
 void IN_StrafeDown( void )
 {
 	KeyDown( &in_strafe );
@@ -840,6 +852,14 @@ void DLLEXPORT CL_CreateMove( float frametime, struct usercmd_s *cmd, int active
 			cmd->sidemove *= cl_movespeedkey->value;
 			cmd->upmove *= cl_movespeedkey->value;
 		}
+		
+		// adjust for walk key
+		if( in_walk.state & 1 )
+		{
+			cmd->forwardmove *= cl_walkspeedkey->value;
+			cmd->sidemove *= cl_walkspeedkey->value;
+			cmd->upmove *= cl_walkspeedkey->value;
+		}
 
 		// clip to maxspeed
 		spd = gEngfuncs.GetClientMaxspeed();
@@ -1093,6 +1113,8 @@ void InitInput( void )
 	gEngfuncs.pfnAddCommand( "-moveright", IN_MoverightUp );
 	gEngfuncs.pfnAddCommand( "+speed", IN_SpeedDown );
 	gEngfuncs.pfnAddCommand( "-speed", IN_SpeedUp );
+	gEngfuncs.pfnAddCommand( "+walk", IN_WalkDown );
+	gEngfuncs.pfnAddCommand( "-walk", IN_WalkUp );
 	gEngfuncs.pfnAddCommand( "+attack", IN_AttackDown );
 	gEngfuncs.pfnAddCommand( "-attack", IN_AttackUp );
 	gEngfuncs.pfnAddCommand( "+attack2", IN_Attack2Down );
@@ -1132,7 +1154,8 @@ void InitInput( void )
 	cl_forwardspeed		= gEngfuncs.pfnRegisterVariable( "cl_forwardspeed", "400", FCVAR_ARCHIVE );
 	cl_backspeed		= gEngfuncs.pfnRegisterVariable( "cl_backspeed", "400", FCVAR_ARCHIVE );
 	cl_sidespeed		= gEngfuncs.pfnRegisterVariable( "cl_sidespeed", "400", 0 );
-	cl_movespeedkey		= gEngfuncs.pfnRegisterVariable( "cl_movespeedkey", "0.3", 0 );
+	cl_movespeedkey		= gEngfuncs.pfnRegisterVariable( "cl_movespeedkey", "1.6", 0 );
+	cl_walkspeedkey		= gEngfuncs.pfnRegisterVariable( "cl_walkspeedkey", "0.5", 0 );
 	cl_pitchup		= gEngfuncs.pfnRegisterVariable( "cl_pitchup", "89", 0 );
 	cl_pitchdown		= gEngfuncs.pfnRegisterVariable( "cl_pitchdown", "89", 0 );
 

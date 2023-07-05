@@ -48,7 +48,22 @@
 // global slots
 #define bits_SLOT_SQUAD_SPLIT		( 1 << 10 )// squad members don't all have the same enemy
 
-#define NUM_SLOTS			11// update this every time you add/remove a slot.
+// HORDE GRUNT SLOTS
+#define bits_SLOT_WGRUNT_ENGAGE1	( 1 << 11 )
+#define bits_SLOT_WGRUNT_ENGAGE2	( 1 << 12 )
+#define bits_SLOTS_WGRUNT_ENGAGE	( bits_SLOT_WGRUNT_ENGAGE1 | bits_SLOT_WGRUNT_ENGAGE2 )
+
+#define bits_SLOT_WGRUNT_GRENADE1	( 1 << 13 ) 
+#define bits_SLOT_WGRUNT_GRENADE2	( 1 << 14 ) 
+#define bits_SLOTS_WGRUNT_GRENADE	( bits_SLOT_WGRUNT_GRENADE1 | bits_SLOT_WGRUNT_GRENADE2 )
+
+// HORDE ELITE SLOTS
+#define bits_SLOT_WELITE_PLASMA1	( 1 << 15 )
+#define bits_SLOT_WELITE_PLASMA2	( 1 << 16 )
+#define bits_SLOT_WELITE_CHASE		( 1 << 17 )
+#define bits_SLOTS_WELITE_PLASMA	( bits_SLOT_WELITE_PLASMA1 | bits_SLOT_WELITE_PLASMA2 )
+
+#define NUM_SLOTS			17 // update this every time you add/remove a slot.
 
 #define	MAX_SQUAD_MEMBERS	5
 

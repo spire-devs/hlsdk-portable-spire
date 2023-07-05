@@ -132,6 +132,7 @@ extern int iMouseInUse;
 extern kbutton_t in_strafe;
 extern kbutton_t in_mlook;
 extern kbutton_t in_speed;
+extern kbutton_t in_walk;
 extern kbutton_t in_jlook;
 
 extern cvar_t *m_pitch;
@@ -148,6 +149,7 @@ extern cvar_t *cl_sidespeed;
 extern cvar_t *cl_forwardspeed;
 extern cvar_t *cl_pitchspeed;
 extern cvar_t *cl_movespeedkey;
+extern cvar_t *cl_walkspeedkey;
 
 #if _WIN32
 static cvar_t* m_rawinput = NULL;
@@ -1366,6 +1368,8 @@ void IN_JoyMove ( float frametime, usercmd_t *cmd )
 
 	if (in_speed.state & 1)
 		speed = cl_movespeedkey->value;
+	else if (in_walk.state & 1)
+		speed = cl_walkspeedkey->value;
 	else
 		speed = 1;
 

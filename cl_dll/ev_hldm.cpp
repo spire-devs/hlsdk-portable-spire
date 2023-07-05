@@ -450,6 +450,15 @@ void EV_HLDM_FireBullets( int idx, float *forward, float *right, float *up, int 
 				EV_HLDM_PlayTextureSound( idx, &tr, vecSrc, vecEnd, iBulletType );
 				EV_HLDM_DecalGunshot( &tr, iBulletType );
 				break;
+			case BULLET_PLAYER_SMALLROUND:
+			case BULLET_PLAYER_MEDIUMROUND:
+			case BULLET_PLAYER_LARGEROUND:
+				if( !tracer )
+				{
+					EV_HLDM_PlayTextureSound( idx, &tr, vecSrc, vecEnd, iBulletType );
+					EV_HLDM_DecalGunshot( &tr, iBulletType );
+				}
+				break;
 			}
 		}
 
@@ -1734,15 +1743,15 @@ void EV_Iceaxe( event_args_t *args )
 		switch( (g_iSwing++) % 3 )
 		{
 			case 0:
-				gEngfuncs.pEventAPI->EV_PlaySound( idx, origin, CHAN_WEAPON, "weapons/iceaxe_swing1.wav", 1, ATTN_NORM, 0, PITCH_NORM ); 
+				gEngfuncs.pEventAPI->EV_PlaySound( idx, origin, CHAN_WEAPON, "weapons/iceaxe/iceaxe_swing1.wav", 1, ATTN_NORM, 0, PITCH_NORM ); 
 				gEngfuncs.pEventAPI->EV_WeaponAnimation( ICEAXE_ATTACK1MISS, 0 );
 				break;
 			case 1:
-				gEngfuncs.pEventAPI->EV_PlaySound( idx, origin, CHAN_WEAPON, "weapons/iceaxe_swing2.wav", 1, ATTN_NORM, 0, PITCH_NORM ); 
+				gEngfuncs.pEventAPI->EV_PlaySound( idx, origin, CHAN_WEAPON, "weapons/iceaxe/iceaxe_swing2.wav", 1, ATTN_NORM, 0, PITCH_NORM ); 
 				gEngfuncs.pEventAPI->EV_WeaponAnimation( ICEAXE_ATTACK2MISS, 0 );
 				break;
 			case 2:
-				gEngfuncs.pEventAPI->EV_PlaySound( idx, origin, CHAN_WEAPON, "weapons/iceaxe_swing1.wav", 1, ATTN_NORM, 0, PITCH_NORM ); 
+				gEngfuncs.pEventAPI->EV_PlaySound( idx, origin, CHAN_WEAPON, "weapons/iceaxe/iceaxe_swing1.wav", 1, ATTN_NORM, 0, PITCH_NORM ); 
 				gEngfuncs.pEventAPI->EV_WeaponAnimation( ICEAXE_ATTACK3MISS, 0 );
 				break;
 		}
@@ -1802,7 +1811,7 @@ void EV_FireFlaregun( event_args_t *args )
 
 	VectorMA( vecSrc, 8192, forward, vecEnd );
 	
-	gEngfuncs.pEventAPI->EV_PlaySound( idx, origin, CHAN_WEAPON, "weapons/flaregun_fire.wav", 1, ATTN_NORM, 0, 94 + gEngfuncs.pfnRandomLong( 0, 0xf ) );
+	gEngfuncs.pEventAPI->EV_PlaySound( idx, origin, CHAN_WEAPON, "weapons/flaregun/flaregun_fire.wav", 1, ATTN_NORM, 0, 94 + gEngfuncs.pfnRandomLong( 0, 0xf ) );
 
 	empty = args->bparam1;
 	
@@ -1827,7 +1836,7 @@ void EV_FireFlaregun( event_args_t *args )
 		//Not the world, let's assume we hit something organic ( dog, cat, uncle joe, etc ).
 		if( pe->solid != SOLID_BSP )
 		{
-			gEngfuncs.pEventAPI->EV_PlaySound( idx, tr.endpos, CHAN_BODY, "weapons/flaregun_impact.wav", 1, ATTN_NORM, 0, PITCH_NORM );
+			gEngfuncs.pEventAPI->EV_PlaySound( idx, tr.endpos, CHAN_BODY, "weapons/flaregun/flaregun_impact.wav", 1, ATTN_NORM, 0, PITCH_NORM );
 		}
 		//Stick to world but don't stick to glass, it might break and leave the bolt floating. It can still stick to other non-transparent breakables though.
 		else if( pe->rendermode == kRenderNormal ) 

@@ -136,7 +136,7 @@ void CGameRules::RefreshSkillData ( void )
 
 	ALERT( at_console, "\nGAME SKILL LEVEL:%d\n",iSkill );
 
-	//Agrunt		
+	// Agrunt		
 	gSkillData.agruntHealth = GetSkillCvar( "sk_agrunt_health" );
 	gSkillData.agruntDmgPunch = GetSkillCvar( "sk_agrunt_dmg_punch" );
 
@@ -227,6 +227,17 @@ void CGameRules::RefreshSkillData ( void )
 
 	// Sentry Turret
 	gSkillData.sentryHealth = GetSkillCvar( "sk_sentry_health" );
+	
+	// WGrunt 
+	gSkillData.wgruntHealth = GetSkillCvar( "sk_wgrunt_health" );
+	gSkillData.wgruntDmgKick = GetSkillCvar( "sk_wgrunt_kick" );
+	gSkillData.wgruntShotgunPellets = GetSkillCvar( "sk_wgrunt_pellets" );
+	gSkillData.wgruntGrenadeSpeed = GetSkillCvar( "sk_wgrunt_gspeed" );
+	
+	// WElite		
+	gSkillData.weliteHealth = GetSkillCvar( "sk_welite_health" );
+	gSkillData.weliteDmgPunch = GetSkillCvar( "sk_welite_dmg_punch" );
+	gSkillData.weliteDmgBall = GetSkillCvar( "sk_welite_dmg_ball" );
 
 	// PLAYER WEAPONS
 
@@ -277,11 +288,21 @@ void CGameRules::RefreshSkillData ( void )
 	// Flaregun
 	gSkillData.plrDmgFlaregunClient = GetSkillCvar( "sk_plr_flaregun_client" );
 	gSkillData.plrDmgFlaregunMonster = GetSkillCvar( "sk_plr_flaregun_monster" );
+	
+	// Spire Round's
+	gSkillData.plrDmgSmallRound = GetSkillCvar( "sk_plr_small_bullet" );
+	gSkillData.plrDmgMediumRound = GetSkillCvar( "sk_plr_medium_bullet" );
+	gSkillData.plrDmgLargeRound = GetSkillCvar( "sk_plr_large_bullet" );
 
 	// MONSTER WEAPONS
 	gSkillData.monDmg12MM = GetSkillCvar( "sk_12mm_bullet" );
 	gSkillData.monDmgMP5 = GetSkillCvar ("sk_9mmAR_bullet" );
 	gSkillData.monDmg9MM = GetSkillCvar( "sk_9mm_bullet" );
+	
+	// Spire
+	gSkillData.monDmgSmallRound = GetSkillCvar( "sk_small_bullet" );
+	gSkillData.monDmgMediumRound = GetSkillCvar( "sk_medium_bullet" );
+	gSkillData.monDmgLargeRound = GetSkillCvar( "sk_large_bullet" );
 
 	// MONSTER HORNET
 	gSkillData.monDmgHornet = GetSkillCvar( "sk_hornet_dmg" );

@@ -10,6 +10,7 @@ extern cvar_t		*in_joystick;
 extern kbutton_t	in_strafe;
 extern kbutton_t	in_mlook;
 extern kbutton_t	in_speed;
+extern kbutton_t	in_walk;
 extern kbutton_t	in_jlook;
 extern kbutton_t	in_forward;
 extern kbutton_t	in_back;
@@ -29,6 +30,7 @@ extern cvar_t	*cl_sidespeed;
 extern cvar_t	*cl_forwardspeed;
 extern cvar_t	*cl_pitchspeed;
 extern cvar_t	*cl_movespeedkey;
+extern cvar_t	*cl_walkspeedkey;
 cvar_t	*cl_laddermode;
 
 
@@ -219,6 +221,11 @@ void FWGSInput::IN_Move( float frametime, usercmd_t *cmd )
 		{
 			cmd->forwardmove *= cl_movespeedkey->value;
 			cmd->sidemove *= cl_movespeedkey->value;
+		}
+		else if( ( in_walk.state & 1 ) && ( ac_sidemove || ac_forwardmove ) )
+		{
+			cmd->forwardmove *= cl_walkspeedkey->value;
+			cmd->sidemove *= cl_walkspeedkey->value;
 		}
 	}
 
