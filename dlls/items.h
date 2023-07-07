@@ -16,6 +16,8 @@
 #if !defined(ITEMS_H)
 #define ITEMS_H
 
+#define ITEM_SLOT6			6
+
 class CItem : public CBaseEntity
 {
 public:

@@ -32,6 +32,7 @@ set SOURCES=agrunt.cpp ^
 	effects.cpp ^
 	egon.cpp ^
 	explode.cpp ^
+	flaregun.cpp ^
 	flyingmonster.cpp ^
 	func_break.cpp ^
 	func_tank.cpp ^
@@ -54,9 +55,13 @@ set SOURCES=agrunt.cpp ^
 	headcrab.cpp ^
 	healthkit.cpp ^
 	hgrunt.cpp ^
+	horde_elite.cpp ^
+	horde_grunt.cpp ^
+	horde_police.cpp ^
 	hornet.cpp ^
 	hornetgun.cpp ^
 	houndeye.cpp ^
+	iceaxe.cpp ^
 	ichthyosaur.cpp ^
 	islave.cpp ^
 	items.cpp ^
@@ -103,6 +108,9 @@ set SOURCES=agrunt.cpp ^
 	tripmine.cpp ^
 	turret.cpp ^
 	util.cpp ^
+	weapon_ak47.cpp ^
+	weapon_gr9c.cpp ^
+	weapon_mp5k.cpp ^
 	weapons.cpp ^
 	world.cpp ^
 	xen.cpp ^

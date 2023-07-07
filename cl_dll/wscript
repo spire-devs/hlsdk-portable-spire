@@ -85,7 +85,10 @@ def build(bld):
 		'dlls/satchel.cpp',
 		'dlls/shotgun.cpp',
 		'dlls/squeakgrenade.cpp',
-		'dlls/tripmine.cpp'
+		'dlls/tripmine.cpp',
+		'dlls/weapon_mp5k.cpp',
+		'dlls/weapon_ak47.cpp',
+		'dlls/weapon_gr9c.cpp'
 	])
 
 

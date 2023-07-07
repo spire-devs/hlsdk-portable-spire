@@ -309,7 +309,7 @@ void W_Precache( void )
 
 	// shotgun
 	UTIL_PrecacheOtherWeapon( "weapon_shotgun" );
-	UTIL_PrecacheOther( "ammo_buckshot" );
+	UTIL_PrecacheOther( "ammo_box_buckshot" );
 
 	// crowbar
 	UTIL_PrecacheOtherWeapon( "weapon_crowbar" );
@@ -366,6 +366,21 @@ void W_Precache( void )
 	UTIL_PrecacheOtherWeapon( "weapon_flaregun" );
 	UTIL_PrecacheOther( "ammo_flare" );
 	UTIL_PrecacheOther( "ammo_flarebox" );
+	
+	// SMG1 - MP5k
+	UTIL_PrecacheOtherWeapon( "weapon_smg1" );
+	UTIL_PrecacheOther( "ammo_box_mrounds" );
+	UTIL_PrecacheOther( "ammo_large_box_mrounds" );
+	
+	// AR1 - AK47
+	UTIL_PrecacheOtherWeapon( "weapon_ar1" );
+	UTIL_PrecacheOther( "ammo_box_srounds" );
+	UTIL_PrecacheOther( "ammo_large_box_srounds" );
+	
+	// HMG1 - GR9C
+	UTIL_PrecacheOtherWeapon( "weapon_hmg1" );
+	UTIL_PrecacheOther( "ammo_box_lrounds" );
+	UTIL_PrecacheOther( "ammo_large_box_lrounds" );
 
 	if( g_pGameRules->IsDeathmatch() )
 	{

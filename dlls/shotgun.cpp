@@ -95,12 +95,12 @@ int CShotgun::GetItemInfo( ItemInfo *p )
 {
 	p->pszName = STRING( pev->classname );
 	p->pszAmmo1 = "buckshot";
-	p->iMaxAmmo1 = BUCKSHOT_MAX_CARRY;
+	p->iMaxAmmo1 = BROUNDS_MAX_CARRY;
 	p->pszAmmo2 = NULL;
 	p->iMaxAmmo2 = -1;
 	p->iMaxClip = SHOTGUN_MAX_CLIP;
-	p->iSlot = 2;
-	p->iPosition = 1;
+	p->iSlot = 3;
+	p->iPosition = 0;
 	p->iFlags = 0;
 	p->iId = m_iId = WEAPON_SHOTGUN;
 	p->iWeight = SHOTGUN_WEIGHT;
@@ -371,6 +371,7 @@ class CShotgunAmmo : public CBasePlayerAmmo
 {
 	void Spawn( void )
 	{ 
+		pev->classname = MAKE_STRING( "ammo_box_buckshot" ); // hack to allow for old names
 		Precache();
 		SET_MODEL( ENT( pev ), "models/w_shotbox.mdl" );
 		CBasePlayerAmmo::Spawn();
@@ -382,7 +383,7 @@ class CShotgunAmmo : public CBasePlayerAmmo
 	}
 	BOOL AddAmmo( CBaseEntity *pOther ) 
 	{ 
-		if( pOther->GiveAmmo( AMMO_BUCKSHOTBOX_GIVE, "buckshot", BUCKSHOT_MAX_CARRY ) != -1 )
+		if( pOther->GiveAmmo( AMMO_BROUNDS_GIVE, "buckshot", BROUNDS_MAX_CARRY ) != -1 )
 		{
 			EMIT_SOUND( ENT( pev ), CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM );
 			return TRUE;
@@ -391,4 +392,5 @@ class CShotgunAmmo : public CBasePlayerAmmo
 	}
 };
 
+LINK_ENTITY_TO_CLASS( ammo_box_buckshot, CShotgunAmmo )
 LINK_ENTITY_TO_CLASS( ammo_buckshot, CShotgunAmmo )

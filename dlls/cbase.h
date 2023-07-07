@@ -462,6 +462,9 @@ public:
 	int ammo_hornets;
 	int ammo_argrens;
 	int ammo_flares;
+	int ammo_srounds;
+	int ammo_mrounds;
+	int ammo_lrounds;
 	//Special stuff for grenades and satchels.
 	float m_flStartThrow;
 	float m_flReleaseThrow;

@@ -24,6 +24,9 @@ set SOURCES=../dlls/crossbow.cpp ^
 	../dlls/glock.cpp ^
 	../dlls/iceaxe.cpp ^
 	../dlls/flaregun.cpp ^
+	../dlls/weapon_mp5k.cpp ^
+	../dlls/weapon_ak47.cpp ^
+	../dlls/weapon_gr9c.cpp ^
 	ev_hldm.cpp ^
 	hl/hl_baseentity.cpp ^
 	hl/hl_events.cpp ^

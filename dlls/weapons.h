@@ -57,10 +57,10 @@ public:
 };
 
 // constant items
-#define ITEM_HEALTHKIT		1
-#define ITEM_ANTIDOTE		2
-#define ITEM_SECURITY		3
-#define ITEM_BATTERY		4
+#define ITEM_HEALTHKIT			1
+#define ITEM_ANTIDOTE			2
+#define ITEM_SECURITY			3
+#define ITEM_BATTERY			4
 
 #define WEAPON_NONE				0
 #define WEAPON_CROWBAR			1
@@ -80,30 +80,37 @@ public:
 #define	WEAPON_SNARK			15
 #define WEAPON_ICEAXE			16
 #define WEAPON_FLAREGUN			17
+#define WEAPON_SMG1				18
+#define WEAPON_AR1				19
+#define WEAPON_HMG1				20
 
 #define WEAPON_ALLWEAPONS		(~(1<<WEAPON_SUIT))
 
 #define WEAPON_SUIT				31	// ?????
 
-#define MAX_NORMAL_BATTERY	100
+#define MAX_NORMAL_BATTERY		100
 
 // weapon weight factors (for auto-switching)   (-1 = noswitch)
-#define CROWBAR_WEIGHT		0
-#define GLOCK_WEIGHT		10
-#define PYTHON_WEIGHT		15
-#define MP5_WEIGHT			15
-#define SHOTGUN_WEIGHT		15
-#define CROSSBOW_WEIGHT		10
-#define RPG_WEIGHT			20
-#define GAUSS_WEIGHT		20
-#define EGON_WEIGHT			20
-#define HORNETGUN_WEIGHT	10
-#define HANDGRENADE_WEIGHT	5
-#define SNARK_WEIGHT		5
-#define SATCHEL_WEIGHT		-10
-#define TRIPMINE_WEIGHT		-10
-#define ICEAXE_WEIGHT		0
-#define FLAREGUN_WEIGHT		15
+#define CROWBAR_WEIGHT			0
+#define GLOCK_WEIGHT			10
+#define PYTHON_WEIGHT			15
+#define MP5_WEIGHT				15
+#define SHOTGUN_WEIGHT			15
+#define CROSSBOW_WEIGHT			10
+#define RPG_WEIGHT				20
+#define GAUSS_WEIGHT			20
+#define EGON_WEIGHT				20
+#define HORNETGUN_WEIGHT		10
+#define HANDGRENADE_WEIGHT		5
+#define SNARK_WEIGHT			5
+#define SATCHEL_WEIGHT			-10
+#define TRIPMINE_WEIGHT			-10
+
+#define ICEAXE_WEIGHT			0
+#define FLAREGUN_WEIGHT			15
+#define SMG1_WEIGHT				15
+#define AR1_WEIGHT				15
+#define HMG1_WEIGHT				10
 
 // weapon clip/carry ammo capacities
 #define URANIUM_MAX_CARRY		100
@@ -118,7 +125,12 @@ public:
 #define SNARK_MAX_CARRY			15
 #define HORNET_MAX_CARRY		8
 #define M203_GRENADE_MAX_CARRY	10
-#define FLAREGUN_MAX_CARRY		20
+
+#define SROUNDS_MAX_CARRY		150
+#define MROUNDS_MAX_CARRY		150
+#define LROUNDS_MAX_CARRY		60
+#define BROUNDS_MAX_CARRY		30 // Buckshot - HL2
+#define FLAREGUN_MAX_CARRY		20 // Flares
 
 // the maximum amount of ammo each weapon's clip can hold
 #define WEAPON_NOCLIP			-1
@@ -138,6 +150,9 @@ public:
 #define TRIPMINE_MAX_CLIP		WEAPON_NOCLIP
 #define SNARK_MAX_CLIP			WEAPON_NOCLIP
 #define FLAREGUN_MAX_CLIP		1
+#define SMG1_MAX_CLIP			30
+#define AR1_MAX_CLIP			30
+#define HMG1_MAX_CLIP			30
 
 // the default amount of ammo that comes with each gun when it spawns
 #define GLOCK_DEFAULT_GIVE			17
@@ -154,7 +169,11 @@ public:
 #define TRIPMINE_DEFAULT_GIVE		1
 #define SNARK_DEFAULT_GIVE			5
 #define HIVEHAND_DEFAULT_GIVE		8
+
 #define FLAREGUN_DEFAULT_GIVE		1
+#define SMG1_DEFAULT_GIVE			30
+#define AR1_DEFAULT_GIVE			30
+#define HMG1_DEFAULT_GIVE			30
 
 // The amount of ammo given to a player by an ammo item.
 #define AMMO_URANIUMBOX_GIVE	20
@@ -168,8 +187,12 @@ public:
 #define AMMO_RPGCLIP_GIVE		RPG_MAX_CLIP
 #define AMMO_URANIUMBOX_GIVE	20
 #define AMMO_SNARKBOX_GIVE		5
+
 #define AMMO_FLARE_GIVE			FLAREGUN_MAX_CLIP
 #define AMMO_FLAREBOX_GIVE		5
+#define AMMO_BOXROUNDS_GIVE		20
+#define AMMO_LBOXROUNDS_GIVE	100
+#define AMMO_BROUNDS_GIVE		20
 
 // bullet types
 typedef	enum
@@ -1078,4 +1101,94 @@ private:
 
 	unsigned short m_usFireFlaregun;
 };
+
+class CSMG1 : public CBasePlayerWeapon
+{
+public:
+	void Spawn( void );
+	void Precache( void );
+	int iItemSlot( void ) { return 3; }
+	int GetItemInfo(ItemInfo *p);
+	int AddToPlayer( CBasePlayer *pPlayer );
+
+	void PrimaryAttack( void );
+	BOOL Deploy( void );
+	void Reload( void );
+	void WeaponIdle( void );
+	float m_flNextAnimTime;
+	int m_iShell;
+
+	virtual BOOL UseDecrement( void )
+	{ 
+#if CLIENT_WEAPONS
+		return TRUE;
+#else
+		return FALSE;
+#endif
+	}
+
+private:
+	unsigned short m_usSMG1;
+};
+
+
+class CAR1 : public CBasePlayerWeapon
+{
+public:
+	void Spawn( void );
+	void Precache( void );
+	int iItemSlot( void ) { return 3; }
+	int GetItemInfo(ItemInfo *p);
+	int AddToPlayer( CBasePlayer *pPlayer );
+
+	void PrimaryAttack( void );
+	BOOL Deploy( void );
+	void Reload( void );
+	void WeaponIdle( void );
+	float m_flNextAnimTime;
+	int m_iShell;
+
+	virtual BOOL UseDecrement( void )
+	{ 
+#if CLIENT_WEAPONS
+		return TRUE;
+#else
+		return FALSE;
+#endif
+	}
+
+private:
+	unsigned short m_usAR1;
+};
+
+
+class CHMG1 : public CBasePlayerWeapon
+{
+public:
+	void Spawn( void );
+	void Precache( void );
+	int iItemSlot( void ) { return 3; }
+	int GetItemInfo(ItemInfo *p);
+	int AddToPlayer( CBasePlayer *pPlayer );
+
+	void PrimaryAttack( void );
+	BOOL Deploy( void );
+	void Reload( void );
+	void WeaponIdle( void );
+	float m_flNextAnimTime;
+	int m_iShell;
+
+	virtual BOOL UseDecrement( void )
+	{ 
+#if CLIENT_WEAPONS
+		return TRUE;
+#else
+		return FALSE;
+#endif
+	}
+
+private:
+	unsigned short m_usHMG1;
+};
+
 #endif // WEAPONS_H

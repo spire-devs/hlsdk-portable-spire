@@ -70,6 +70,9 @@ CTripmine g_Tripmine;
 CSqueak g_Snark;
 CIceaxe g_Iceaxe;
 CFlaregun g_Flaregun;
+CSMG1 g_SMG1;
+CAR1 g_AR1;
+CHMG1 g_HMG1;
 
 /*
 ======================
@@ -648,6 +651,9 @@ void HUD_InitClientWeapons( void )
 	HUD_PrepEntity( &g_Snark, &player );
 	HUD_PrepEntity( &g_Iceaxe, &player );
 	HUD_PrepEntity( &g_Flaregun, &player );
+	HUD_PrepEntity( &g_SMG1, &player );
+	HUD_PrepEntity( &g_AR1, &player );
+	HUD_PrepEntity( &g_HMG1, &player );
 }
 
 /*
@@ -759,6 +765,15 @@ void HUD_WeaponsPostThink( local_state_s *from, local_state_s *to, usercmd_t *cm
 		case WEAPON_FLAREGUN:
 			pWeapon = &g_Flaregun;
 			break;
+		case WEAPON_SMG1:
+			pWeapon = &g_SMG1;
+			break;
+		case WEAPON_AR1:
+			pWeapon = &g_AR1;
+			break;
+		case WEAPON_HMG1:
+			pWeapon = &g_HMG1;
+			break;
 	}
 
 	// Store pointer to our destination entity_state_t so we can get our origin, etc. from it
@@ -856,6 +871,10 @@ void HUD_WeaponsPostThink( local_state_s *from, local_state_s *to, usercmd_t *cm
 	player.ammo_uranium = (int)from->client.ammo_cells;
 	player.ammo_hornets = (int)from->client.vuser2[0];
 	player.ammo_rockets = (int)from->client.ammo_rockets;
+	
+	player.ammo_srounds = (int)from->client.vuser2.y;
+	player.ammo_mrounds = (int)from->client.vuser2.z;
+	player.ammo_lrounds = (int)from->client.vuser2.x;
 
 	// Point to current weapon object
 	if( from->client.m_iId )
@@ -930,6 +949,10 @@ void HUD_WeaponsPostThink( local_state_s *from, local_state_s *to, usercmd_t *cm
 	to->client.ammo_cells = player.ammo_uranium;
 	to->client.vuser2[0] = player.ammo_hornets;
 	to->client.ammo_rockets = player.ammo_rockets;
+	
+	to->client.vuser2.y = player.ammo_srounds;
+	to->client.vuser2.z = player.ammo_mrounds;
+	to->client.vuser2.x = player.ammo_lrounds;
 
 	if( player.m_pActiveItem->m_iId == WEAPON_RPG )
 	{

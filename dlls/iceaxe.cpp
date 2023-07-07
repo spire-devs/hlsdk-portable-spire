@@ -79,7 +79,7 @@ int CIceaxe::GetItemInfo( ItemInfo *p )
 	p->iMaxAmmo2 = -1;
 	p->iMaxClip = WEAPON_NOCLIP;
 	p->iSlot = 0;
-	p->iPosition = 1;
+	p->iPosition = 0;
 	p->iId = WEAPON_ICEAXE;
 	p->iWeight = ICEAXE_WEIGHT;
 	return 1;

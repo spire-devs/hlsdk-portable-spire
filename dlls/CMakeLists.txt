@@ -39,7 +39,6 @@ set (SVDLL_SOURCES
 	agrunt.cpp
 	airtank.cpp
 	aflock.cpp
-	alias.cpp
 	animating.cpp
 	animation.cpp
 	apache.cpp
@@ -84,22 +83,23 @@ set (SVDLL_SOURCES
 	headcrab.cpp
 	healthkit.cpp
 	hgrunt.cpp
+	horde_elite.cpp
+	horde_grunt.cpp
+	horde_police.cpp
 	hornet.cpp
 	hornetgun.cpp
 	houndeye.cpp
 	iceaxe.cpp
 	ichthyosaur.cpp
-	islave_deamon.cpp
+	islave.cpp
 	items.cpp
 	leech.cpp
 	lights.cpp
-	locus.cpp
 	maprules.cpp
 	monstermaker.cpp
 	monsters.cpp
 	monsterstate.cpp
 	mortar.cpp
-	movewith.cpp
 	mp5.cpp
 	multiplay_gamerules.cpp
 	nihilanth.cpp
@@ -136,6 +136,9 @@ set (SVDLL_SOURCES
 	tripmine.cpp
 	turret.cpp
 	util.cpp
+	weapon_ak47.cpp
+	weapon_gr9c.cpp
+	weapon_mp5k.cpp
 	weapons.cpp
 	world.cpp
 	xen.cpp

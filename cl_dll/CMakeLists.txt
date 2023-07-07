@@ -69,6 +69,9 @@ set (CLDLL_SOURCES
 	../dlls/squeakgrenade.cpp
 	../dlls/tripmine.cpp
 	../dlls/glock.cpp
+	../dlls/weapon_mp5k.cpp
+	../dlls/weapon_ak47.cpp
+	../dlls/weapon_gr9c.cpp
 	ev_hldm.cpp
 	hl/hl_baseentity.cpp
 	hl/hl_events.cpp
