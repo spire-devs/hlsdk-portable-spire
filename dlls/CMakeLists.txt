@@ -39,6 +39,7 @@ set (SVDLL_SOURCES
 	agrunt.cpp
 	airtank.cpp
 	aflock.cpp
+	alias.cpp
 	animating.cpp
 	animation.cpp
 	apache.cpp
@@ -91,15 +92,17 @@ set (SVDLL_SOURCES
 	houndeye.cpp
 	iceaxe.cpp
 	ichthyosaur.cpp
-	islave.cpp
+	islave_deamon.cpp
 	items.cpp
 	leech.cpp
 	lights.cpp
+	locus.cpp
 	maprules.cpp
 	monstermaker.cpp
 	monsters.cpp
 	monsterstate.cpp
 	mortar.cpp
+	movewith.cpp
 	mp5.cpp
 	multiplay_gamerules.cpp
 	nihilanth.cpp

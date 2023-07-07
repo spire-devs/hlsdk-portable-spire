@@ -582,7 +582,7 @@ void CFlaregun::Reload( void )
 
 	int iResult;
 
-	iResult = DefaultReload( FLAREGUN_MAX_CLIP, FLAREGUN_RELOAD, 1.5f );
+	iResult = DefaultReload( FLAREGUN_MAX_CLIP, FLAREGUN_RELOAD, 2.5f );
 
 	if( iResult )
 	{

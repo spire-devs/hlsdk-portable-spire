@@ -1820,7 +1820,11 @@ void EV_FireFlaregun( event_args_t *args )
 	
 	if( EV_IsLocal( idx ) )
 	{
+		// Add muzzle flash to current weapon model
+		EV_MuzzleFlash();
 		gEngfuncs.pEventAPI->EV_WeaponAnimation( empty ? FLAREGUN_DRYFIRE : FLAREGUN_SHOOT, 0 );
+		
+		V_PunchAxis( 0, -5.0 );
 	}
 
 	// Store off the old count

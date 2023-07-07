@@ -126,7 +126,7 @@ void CSMG1::PrimaryAttack()
 		return;
 	}
 
-	m_pPlayer->m_iWeaponVolume = NORMAL_GUN_VOLUME;
+	m_pPlayer->m_iWeaponVolume = LOUD_GUN_VOLUME;
 	m_pPlayer->m_iWeaponFlash = NORMAL_GUN_FLASH;
 
 	m_iClip--;
@@ -141,7 +141,7 @@ void CSMG1::PrimaryAttack()
 	Vector vecDir;
 
 	// single player spread
-	vecDir = m_pPlayer->FireBulletsPlayer( 1, vecSrc, vecAiming, VECTOR_CONE_10DEGREES, 8192, BULLET_PLAYER_MEDIUMROUND, 2, 0, m_pPlayer->pev, m_pPlayer->random_seed );
+	vecDir = m_pPlayer->FireBulletsPlayer( 1, vecSrc, vecAiming, VECTOR_CONE_6DEGREES, 8192, BULLET_PLAYER_MEDIUMROUND, 2, 0, m_pPlayer->pev, m_pPlayer->random_seed );
 
 	int flags;
 #if CLIENT_WEAPONS
@@ -155,10 +155,10 @@ void CSMG1::PrimaryAttack()
 		// HEV suit - indicate out of ammo condition
 		m_pPlayer->SetSuitUpdate( "!HEV_AMO0", FALSE, 0 );
 
-	m_flNextPrimaryAttack = GetNextAttackDelay( 0.1f );
+	m_flNextPrimaryAttack = GetNextAttackDelay( 0.1125f );
 
 	if( m_flNextPrimaryAttack < UTIL_WeaponTimeBase() )
-		m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.1f;
+		m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.1125f;
 
 	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + UTIL_SharedRandomFloat( m_pPlayer->random_seed, 10, 15 );
 }
@@ -202,12 +202,12 @@ class CAmmo_BoxMRounds : public CBasePlayerAmmo
 	void Spawn( void )
 	{
 		Precache();
-		SET_MODEL( ENT( pev ), "models/items/boxmrounds.mdl" );
+		SET_MODEL( ENT( pev ), "models/items/w_boxmrounds.mdl" );
 		CBasePlayerAmmo::Spawn();
 	}
 	void Precache( void )
 	{
-		PRECACHE_MODEL( "models/items/boxmrounds.mdl" );
+		PRECACHE_MODEL( "models/items/w_boxmrounds.mdl" );
 		PRECACHE_SOUND( "items/9mmclip1.wav" );
 	}
 	BOOL AddAmmo( CBaseEntity *pOther ) 
@@ -228,12 +228,12 @@ class CAmmo_LargeBoxMRounds : public CBasePlayerAmmo
 	void Spawn( void )
 	{
 		Precache();
-		SET_MODEL( ENT( pev ), "models/items/boxmrounds.mdl" );
+		SET_MODEL( ENT( pev ), "models/items/w_boxmrounds_large.mdl" );
 		CBasePlayerAmmo::Spawn();
 	}
 	void Precache( void )
 	{
-		PRECACHE_MODEL( "models/items/boxmrounds.mdl" );
+		PRECACHE_MODEL( "models/items/w_boxmrounds_large.mdl" );
 		PRECACHE_SOUND( "items/9mmclip1.wav" );
 	}
 	BOOL AddAmmo( CBaseEntity *pOther ) 
