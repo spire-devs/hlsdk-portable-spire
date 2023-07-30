@@ -69,6 +69,7 @@ void EV_HornetGunFire( struct event_args_s *args );
 void EV_TripmineFire( struct event_args_s *args );
 void EV_SnarkFire( struct event_args_s *args );
 void EV_Iceaxe( struct event_args_s *args );
+void EV_Iceaxe2( struct event_args_s *args );
 void EV_FireFlaregun( struct event_args_s *args  );
 void EV_FireSMG1( struct event_args_s *args  );
 void EV_FireAR1( struct event_args_s *args  );
@@ -574,7 +575,7 @@ void EV_FireShotGunDouble( event_args_t *args )
 		EV_EjectBrass( ShellOrigin, ShellVelocity, angles[ YAW ], shell, TE_BOUNCE_SHOTSHELL ); 
 	}
 
-	gEngfuncs.pEventAPI->EV_PlaySound( idx, origin, CHAN_WEAPON, "weapons/dbarrel1.wav", gEngfuncs.pfnRandomFloat( 0.98, 1.0 ), ATTN_NORM, 0, 85 + gEngfuncs.pfnRandomLong( 0, 0x1f ) );
+	gEngfuncs.pEventAPI->EV_PlaySound( idx, origin, CHAN_WEAPON, "weapons/shotgun/shotgun_double.wav", gEngfuncs.pfnRandomFloat( 0.68, 0.7 ), ATTN_NORM, 0, 85 + gEngfuncs.pfnRandomLong( 0, 0x1f ) );
 
 	EV_GetGunPosition( args, vecSrc, origin );
 	VectorCopy( forward, vecAiming );
@@ -626,7 +627,7 @@ void EV_FireShotGunSingle( event_args_t *args )
 
 	EV_EjectBrass ( ShellOrigin, ShellVelocity, angles[YAW], shell, TE_BOUNCE_SHOTSHELL ); 
 
-	gEngfuncs.pEventAPI->EV_PlaySound( idx, origin, CHAN_WEAPON, "weapons/sbarrel1.wav", gEngfuncs.pfnRandomFloat( 0.95, 1.0 ), ATTN_NORM, 0, 93 + gEngfuncs.pfnRandomLong( 0, 0x1f ) );
+	gEngfuncs.pEventAPI->EV_PlaySound( idx, origin, CHAN_WEAPON, "weapons/shotgun/shotgun_single.wav", gEngfuncs.pfnRandomFloat( 0.68, 0.7 ), ATTN_NORM, 0, 93 + gEngfuncs.pfnRandomLong( 0, 0x1f ) );
 
 	EV_GetGunPosition( args, vecSrc, origin );
 	VectorCopy( forward, vecAiming );
@@ -1720,6 +1721,8 @@ enum iceaxe_e
 	ICEAXE_ATTACK2HIT,
 	ICEAXE_ATTACK3MISS,
 	ICEAXE_ATTACK3HIT,
+	ICEAXE_IDLE2,
+	ICEAXE_IDLE3,
 	ICEAXE_BIG_ATTACK1MISS,
 	ICEAXE_BIG_ATTACK1HIT,
 	ICEAXE_BIG_ATTACK2MISS,
@@ -1760,6 +1763,40 @@ void EV_Iceaxe( event_args_t *args )
 		}
 	}
 }
+
+//Only predict the miss sounds, hit sounds are still played 
+//server side, so players don't get the wrong idea.
+void EV_Iceaxe2( event_args_t *args )
+{
+	int idx;
+	vec3_t origin;
+	//vec3_t angles;
+	//vec3_t velocity;
+
+	idx = args->entindex;
+	VectorCopy( args->origin, origin );
+	
+	//Play Swing sound
+	if( EV_IsLocal( idx ) )
+	{
+		switch( (g_iSwing++) % 3 )
+		{
+			case 0:
+				gEngfuncs.pEventAPI->EV_PlaySound( idx, origin, CHAN_WEAPON, "weapons/iceaxe/iceaxe_swing1.wav", 1, ATTN_NORM, 0, PITCH_NORM ); 
+				gEngfuncs.pEventAPI->EV_WeaponAnimation( ICEAXE_ATTACK1MISS, 0 );
+				break;
+			case 1:
+				gEngfuncs.pEventAPI->EV_PlaySound( idx, origin, CHAN_WEAPON, "weapons/iceaxe/iceaxe_swing2.wav", 1, ATTN_NORM, 0, PITCH_NORM ); 
+				gEngfuncs.pEventAPI->EV_WeaponAnimation( ICEAXE_ATTACK2MISS, 0 );
+				break;
+			case 2:
+				gEngfuncs.pEventAPI->EV_PlaySound( idx, origin, CHAN_WEAPON, "weapons/iceaxe/iceaxe_swing1.wav", 1, ATTN_NORM, 0, PITCH_NORM ); 
+				gEngfuncs.pEventAPI->EV_WeaponAnimation( ICEAXE_ATTACK3MISS, 0 );
+				break;
+		}
+	}
+}
+
 //======================
 //	   ICEAXE END 
 //======================

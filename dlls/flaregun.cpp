@@ -522,20 +522,6 @@ void CFlaregun::PrimaryAttack( void )
 	}
 
 	m_iClip--;
-
-	m_pPlayer->pev->effects = (int)( m_pPlayer->pev->effects ) | EF_MUZZLEFLASH;
-
-	int flags;
-#if CLIENT_WEAPONS
-	flags = FEV_NOTHOST;
-#else
-	flags = 0;
-#endif
-	// player "shoot" animation
-	m_pPlayer->SetAnimation( PLAYER_ATTACK1 );
-
-	m_pPlayer->m_iWeaponVolume = LOUD_GUN_VOLUME;
-	m_pPlayer->m_iWeaponFlash = BRIGHT_GUN_FLASH;
 	
 	Vector anglesAim = m_pPlayer->pev->v_angle + m_pPlayer->pev->punchangle;
 	UTIL_MakeVectors( anglesAim );
@@ -543,7 +529,7 @@ void CFlaregun::PrimaryAttack( void )
 	anglesAim.x	= -anglesAim.x;
 
 #if !CLIENT_DLL
-	Vector vecSrc	= m_pPlayer->GetGunPosition() + gpGlobals->v_forward * 16.0f + gpGlobals->v_right * 8.0f + gpGlobals->v_up * -12.0f;
+	Vector vecSrc	= m_pPlayer->GetGunPosition() + gpGlobals->v_forward * 16.0f + gpGlobals->v_right * 4.0f + gpGlobals->v_up * -8.0f;
 	Vector vecDir	= gpGlobals->v_forward;
 
 	CFlareShot *pFlare = CFlareShot::FlareCreate();
@@ -563,6 +549,73 @@ void CFlaregun::PrimaryAttack( void )
 	}
 	pFlare->pev->avelocity.z = 10.0f;
 #endif
+
+	FireFlare();
+}
+
+void CFlaregun::SecondaryAttack( void )
+{
+	if( m_iClip <= 0 )
+	{
+		if( m_fFireOnEmpty )
+		{
+			PlayEmptySound();
+			m_flNextPrimaryAttack = GetNextAttackDelay( 0.2f );
+		}
+
+		return;
+	}
+
+	m_iClip--;
+	
+	m_flNextSecondaryAttack = m_flNextPrimaryAttack;
+	
+	Vector anglesAim = m_pPlayer->pev->v_angle + m_pPlayer->pev->punchangle;
+	UTIL_MakeVectors( anglesAim );
+
+	anglesAim.x	= -anglesAim.x;
+
+#if !CLIENT_DLL
+	Vector vecSrc	= m_pPlayer->GetGunPosition() + gpGlobals->v_forward * 16.0f + gpGlobals->v_right * 4.0f + gpGlobals->v_up * -8.0f;
+	Vector vecDir	= gpGlobals->v_forward;
+
+	CFlareShot *pFlare = CFlareShot::FlareCreate();
+	pFlare->pev->origin = vecSrc;
+	pFlare->pev->angles = anglesAim;
+	pFlare->pev->owner = m_pPlayer->edict();
+
+	if (m_pPlayer->pev->waterlevel == 3 && m_pPlayer->pev->watertype > CONTENT_FLYFIELD)
+	{
+		pFlare->pev->velocity = vecDir * FLARE_WATER_VELOCITY / 2;
+		pFlare->pev->speed = FLARE_WATER_VELOCITY / 2;
+	}
+	else
+	{
+		pFlare->pev->velocity = vecDir * FLARE_AIR_VELOCITY / 2;
+		pFlare->pev->speed = FLARE_AIR_VELOCITY / 2;
+	}
+	pFlare->pev->avelocity.z = 10.0f;
+#endif
+
+	FireFlare();
+}
+
+void CFlaregun::FireFlare( void )
+{
+
+	m_pPlayer->pev->effects = (int)( m_pPlayer->pev->effects ) | EF_MUZZLEFLASH;
+
+	int flags;
+#if CLIENT_WEAPONS
+	flags = FEV_NOTHOST;
+#else
+	flags = 0;
+#endif
+	// player "shoot" animation
+	m_pPlayer->SetAnimation( PLAYER_ATTACK1 );
+
+	m_pPlayer->m_iWeaponVolume = LOUD_GUN_VOLUME;
+	m_pPlayer->m_iWeaponFlash = BRIGHT_GUN_FLASH;
 
 	PLAYBACK_EVENT_FULL( flags, m_pPlayer->edict(), m_usFireFlaregun, 0.0f, g_vecZero, g_vecZero, 0, 0, m_iClip, 0, 0, 0 );
 

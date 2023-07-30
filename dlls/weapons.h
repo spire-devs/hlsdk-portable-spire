@@ -1049,14 +1049,18 @@ public:
 	void Precache( void );
 	int iItemSlot( void ) { return 1; }
 	void EXPORT SwingAgain( void );
+	void EXPORT Swing2Again( void );
 	void EXPORT Smack( void );
 	int GetItemInfo( ItemInfo *p );
 	int AddToPlayer( CBasePlayer *pPlayer );
 
 	void PrimaryAttack( void );
+	void SecondaryAttack( void );
 	int Swing( int fFirst );
+	int Swing2( int fFirst );
 	BOOL Deploy( void );
 	void Holster( int skiplocal = 0 );
+	void WeaponIdle();
 	int m_iSwing;
 	TraceResult m_trHit;
 
@@ -1070,6 +1074,7 @@ public:
 	}
 private:
 	unsigned short m_usIceaxe;
+	unsigned short m_usIceaxe2;
 };
 
 class CFlaregun : public CBasePlayerWeapon
@@ -1082,6 +1087,8 @@ public:
 	int AddToPlayer( CBasePlayer *pPlayer );
 
 	void PrimaryAttack( void );
+	void SecondaryAttack( void );
+	void FireFlare( void );
 	BOOL Deploy( void );
 	void Holster( int skiplocal = 0 );
 	void Reload( void );
