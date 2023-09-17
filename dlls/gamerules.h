@@ -19,7 +19,7 @@
 #if !defined(GAMERULES_H)
 #define GAMERULES_H
 //LRC
-#define GAME_NAME "Spirit of Half-Life"
+#define GAME_NAME "Spire (SOHL1.2)"
 //#include "weapons.h"
 //#include "items.h"
 class CBasePlayerItem;
