@@ -74,6 +74,8 @@ set (CLDLL_SOURCES
 	../dlls/weapon_mp5k.cpp
 	../dlls/weapon_ak47.cpp
 	../dlls/weapon_gr9c.cpp
+	../dlls/weapon_ml.cpp
+	../dlls/weapon_slam.cpp
 	ev_hldm.cpp
 	hl/hl_baseentity.cpp
 	hl/hl_events.cpp

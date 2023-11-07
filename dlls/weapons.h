@@ -83,6 +83,8 @@ public:
 #define WEAPON_SMG1				18
 #define WEAPON_AR1				19
 #define WEAPON_HMG1				20
+#define WEAPON_ML				21
+#define WEAPON_SLAM				22
 
 #define WEAPON_ALLWEAPONS		(~(1<<WEAPON_SUIT))
 
@@ -111,6 +113,8 @@ public:
 #define SMG1_WEIGHT				15
 #define AR1_WEIGHT				15
 #define HMG1_WEIGHT				10
+#define ML_WEIGHT				20
+#define SLAM_WEIGHT				-10
 
 // weapon clip/carry ammo capacities
 #define URANIUM_MAX_CARRY		100
@@ -131,6 +135,7 @@ public:
 #define LROUNDS_MAX_CARRY		60
 #define BROUNDS_MAX_CARRY		30 // Buckshot - HL2
 #define FLAREGUN_MAX_CARRY		20 // Flares
+#define SLAM_MAX_CARRY			5
 
 // the maximum amount of ammo each weapon's clip can hold
 #define WEAPON_NOCLIP			-1
@@ -153,6 +158,8 @@ public:
 #define SMG1_MAX_CLIP			30
 #define AR1_MAX_CLIP			30
 #define HMG1_MAX_CLIP			30
+#define ML_MAX_CLIP				1
+#define SLAM_MAX_CLIP			WEAPON_NOCLIP
 
 // the default amount of ammo that comes with each gun when it spawns
 #define GLOCK_DEFAULT_GIVE			17
@@ -174,6 +181,8 @@ public:
 #define SMG1_DEFAULT_GIVE			30
 #define AR1_DEFAULT_GIVE			30
 #define HMG1_DEFAULT_GIVE			30
+#define ML_DEFAULT_GIVE				1
+#define SLAM_DEFAULT_GIVE			1
 
 // The amount of ammo given to a player by an ammo item.
 #define AMMO_URANIUMBOX_GIVE	20
@@ -1196,6 +1205,95 @@ public:
 
 private:
 	unsigned short m_usHMG1;
+};
+
+class CMl : public CBasePlayerWeapon
+{
+public:
+	void Spawn( void );
+	void Precache( void );
+	void Reload( void );
+	int iItemSlot( void ) { return 4; }
+	int GetItemInfo(ItemInfo *p);
+	int AddToPlayer( CBasePlayer *pPlayer );
+
+	BOOL Deploy( void );
+	BOOL CanHolster( void );
+	void Holster( int skiplocal = 0 );
+
+	void PrimaryAttack( void );
+	void SecondaryAttack( void );
+	void WeaponIdle( void );
+
+	void UpdateSpot( void );
+	BOOL ShouldWeaponIdle( void ) { return TRUE; };
+
+	CLaserSpot *m_pSpot;
+	int m_fSpotActive;
+	int m_cActiveRockets;// how many missiles in flight from this launcher right now?
+
+	virtual BOOL UseDecrement( void )
+	{ 
+#if CLIENT_WEAPONS
+		return TRUE;
+#else
+		return FALSE;
+#endif
+	}
+
+private:
+	unsigned short m_usMl;
+};
+
+class CMlRocket : public CGrenade
+{
+public:
+	void Spawn( void );
+	void Precache( void );
+	void EXPORT FollowThink( void );
+	void EXPORT IgniteThink( void );
+	void EXPORT RocketTouch( CBaseEntity *pOther );
+	static CMlRocket *CreateMlRocket( Vector vecOrigin, Vector vecAngles, CBaseEntity *pOwner, CMl *pLauncher );
+
+	int m_iTrail;
+	float m_flIgniteTime;
+	EHANDLE m_hLauncher; // handle back to the launcher that fired me. 
+};
+
+class CSlam : public CBasePlayerWeapon
+{
+public:
+	void Spawn( void );
+	void Precache( void );
+	int iItemSlot( void ) { return 5; }
+	int GetItemInfo(ItemInfo *p);
+	void SetObjectCollisionBox( void )
+	{
+		//!!!BUGBUG - fix the model!
+		pev->absmin = pev->origin + Vector(-16, -16, -5);
+		pev->absmax = pev->origin + Vector(16, 16, 28); 
+	}
+
+	void PrimaryAttack( void );
+	void Attach( void );
+	void Throw( void );
+	void SecondaryAttack( void );
+	BOOL CanAttach( void );
+	BOOL Deploy( void );
+	void Holster( int skiplocal = 0 );
+	void WeaponIdle( void );
+
+	virtual BOOL UseDecrement( void )
+	{ 
+#if CLIENT_WEAPONS
+		return TRUE;
+#else
+		return FALSE;
+#endif
+	}
+
+private:
+	unsigned short m_usSlamFire;
 };
 
 #endif // WEAPONS_H

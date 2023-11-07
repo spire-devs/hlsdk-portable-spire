@@ -42,7 +42,7 @@ void CSMG1::Spawn()
 {
 	pev->classname = MAKE_STRING( "weapon_smg1" ); // hack to allow for old names
 	Precache();
-	SET_MODEL( ENT( pev ), "models/w_9mmAR.mdl" );
+	SET_MODEL( ENT( pev ), "models/w_mp5.mdl" );
 	m_iId = WEAPON_SMG1;
 
 	m_iDefaultAmmo = SMG1_DEFAULT_GIVE;
@@ -53,14 +53,11 @@ void CSMG1::Spawn()
 void CSMG1::Precache( void )
 {
 	PRECACHE_MODEL( "models/v_9mmAR.mdl" );
-	PRECACHE_MODEL( "models/w_9mmAR.mdl" );
+	PRECACHE_MODEL( "models/w_mp5.mdl" );
 	PRECACHE_MODEL( "models/p_9mmAR.mdl" );
 
 	m_iShell = PRECACHE_MODEL( "models/shell.mdl" );// brass shellTE_MODEL
 
-	PRECACHE_MODEL( "models/grenade.mdl" );	// grenade
-
-	PRECACHE_MODEL( "models/w_9mmARclip.mdl" );
 	PRECACHE_SOUND( "items/9mmclip1.wav" );
 
 	PRECACHE_SOUND( "items/clipinsert1.wav" );

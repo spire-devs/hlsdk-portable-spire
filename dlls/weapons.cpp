@@ -382,6 +382,13 @@ void W_Precache( void )
 	UTIL_PrecacheOther( "ammo_box_lrounds" );
 	UTIL_PrecacheOther( "ammo_large_box_lrounds" );
 
+	// Missile Launcher
+	UTIL_PrecacheOtherWeapon( "weapon_ml" );
+	UTIL_PrecacheOther( "ammo_mlclip" );
+	
+	// SLAM
+	UTIL_PrecacheOtherWeapon( "weapon_slam" );
+
 	if( g_pGameRules->IsDeathmatch() )
 	{
 		UTIL_PrecacheOther( "weaponbox" );// container for dropped deathmatch weapons

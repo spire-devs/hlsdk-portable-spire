@@ -73,6 +73,8 @@ CFlaregun g_Flaregun;
 CSMG1 g_SMG1;
 CAR1 g_AR1;
 CHMG1 g_HMG1;
+CMl g_Ml;
+CSlam g_SLAM;
 
 /*
 ======================
@@ -654,6 +656,8 @@ void HUD_InitClientWeapons( void )
 	HUD_PrepEntity( &g_SMG1, &player );
 	HUD_PrepEntity( &g_AR1, &player );
 	HUD_PrepEntity( &g_HMG1, &player );
+	HUD_PrepEntity( &g_Ml, &player );
+	HUD_PrepEntity( &g_SLAM, &player );
 }
 
 /*
@@ -773,6 +777,12 @@ void HUD_WeaponsPostThink( local_state_s *from, local_state_s *to, usercmd_t *cm
 			break;
 		case WEAPON_HMG1:
 			pWeapon = &g_HMG1;
+			break;
+		case WEAPON_ML:
+			pWeapon = &g_Ml;
+			break;
+		case WEAPON_SLAM:
+			pWeapon = &g_SLAM;
 			break;
 	}
 

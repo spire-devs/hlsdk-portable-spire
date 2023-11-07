@@ -589,7 +589,7 @@ void CWElite::Spawn()
 	if (pev->model)
 		SET_MODEL(ENT(pev), STRING(pev->model)); //LRC
 	else
-		SET_MODEL( ENT( pev ), "models/welite.mdl" );
+		SET_MODEL( ENT( pev ), "models/agrunt.mdl" );
 	UTIL_SetSize( pev, Vector( -32.0f, -32.0f, 0.0f ), Vector( 32.0f, 32.0f, 64.0f ) );
 
 	pev->solid = SOLID_SLIDEBOX;
@@ -619,7 +619,7 @@ void CWElite::Precache()
 	if (pev->model)
 		PRECACHE_MODEL(STRING(pev->model)); //LRC
 	else
-		PRECACHE_MODEL( "models/welite.mdl" );
+		PRECACHE_MODEL( "models/agrunt.mdl" );
 
 	PRECACHE_SOUND_ARRAY( pAttackHitSounds );
 	PRECACHE_SOUND_ARRAY( pAttackMissSounds );
