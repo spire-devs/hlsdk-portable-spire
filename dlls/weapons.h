@@ -67,7 +67,7 @@ public:
 #define	WEAPON_GLOCK			2
 #define WEAPON_PYTHON			3
 #define WEAPON_MP5				4
-#define WEAPON_CHAINGUN			5
+#define WEAPON_CHAINGUN			5 // Use for an MP Exclusive?
 #define WEAPON_CROSSBOW			6
 #define WEAPON_SHOTGUN			7
 #define WEAPON_RPG				8
@@ -85,6 +85,8 @@ public:
 #define WEAPON_HMG1				20
 #define WEAPON_ML				21
 #define WEAPON_SLAM				22
+// 23 - 29 for extra weapons
+#define WEAPON_BINOCULARS		30
 
 #define WEAPON_ALLWEAPONS		(~(1<<WEAPON_SUIT))
 
@@ -1294,6 +1296,34 @@ public:
 
 private:
 	unsigned short m_usSlamFire;
+};
+
+class CBinoculars : public CBasePlayerWeapon
+{
+public:
+	void Spawn( void );
+	void Precache( void );
+	int iItemSlot( ) { return 3; }
+	int GetItemInfo(ItemInfo *p);
+
+	void PrimaryAttack( void );
+	void SecondaryAttack( void );
+	void Zoom( void );
+	int AddToPlayer( CBasePlayer *pPlayer );
+	BOOL Deploy( );
+	void Holster( int skiplocal = 0 );
+	void WeaponIdle( void );
+
+	int m_nZoomLevel;
+
+	virtual BOOL UseDecrement( void )
+	{ 
+#if CLIENT_WEAPONS
+		return TRUE;
+#else
+		return FALSE;
+#endif
+	}
 };
 
 #endif // WEAPONS_H

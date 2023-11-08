@@ -50,6 +50,7 @@ SRCS+=../dlls/weapon_ak47.cpp
 SRCS+=../dlls/weapon_gr9c.cpp
 SRCS+=../dlls/weapon_ml.cpp
 SRCS+=../dlls/weapon_slam.cpp
+SRCS+=../dlls/weapon_binoculars.cpp
 #SRCS+=../game_shared/voice_banmgr.cpp
 #SRCS+=../game_shared/voice_status.cpp
 SRCS+=./ammo.cpp

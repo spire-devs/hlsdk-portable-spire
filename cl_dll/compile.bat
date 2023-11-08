@@ -29,6 +29,7 @@ set SOURCES=../dlls/crossbow.cpp ^
 	../dlls/weapon_gr9c.cpp ^
 	../dlls/weapon_ml.cpp ^
 	../dlls/weapon_slam.cpp ^
+	../dlls/weapon_binoculars.cpp ^
 	ev_hldm.cpp ^
 	hl/hl_baseentity.cpp ^
 	hl/hl_events.cpp ^

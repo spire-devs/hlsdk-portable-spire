@@ -388,6 +388,9 @@ void W_Precache( void )
 	
 	// SLAM
 	UTIL_PrecacheOtherWeapon( "weapon_slam" );
+	
+	// SLAM
+	UTIL_PrecacheOtherWeapon( "weapon_binoculars" );
 
 	if( g_pGameRules->IsDeathmatch() )
 	{

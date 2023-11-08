@@ -75,6 +75,7 @@ CAR1 g_AR1;
 CHMG1 g_HMG1;
 CMl g_Ml;
 CSlam g_SLAM;
+CBinoculars g_Binoculars;
 
 /*
 ======================
@@ -658,6 +659,7 @@ void HUD_InitClientWeapons( void )
 	HUD_PrepEntity( &g_HMG1, &player );
 	HUD_PrepEntity( &g_Ml, &player );
 	HUD_PrepEntity( &g_SLAM, &player );
+	HUD_PrepEntity( &g_Binoculars, &player );
 }
 
 /*
@@ -783,6 +785,9 @@ void HUD_WeaponsPostThink( local_state_s *from, local_state_s *to, usercmd_t *cm
 			break;
 		case WEAPON_SLAM:
 			pWeapon = &g_SLAM;
+			break;
+		case WEAPON_BINOCULARS:
+			pWeapon = &g_Binoculars;
 			break;
 	}
 
